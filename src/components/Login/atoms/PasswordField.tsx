@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useRecoilState } from "recoil";
+import { passwordState } from "@/app/store/LoginAtoms";
 
 export const PasswordField = () => {
-  const [password, setPassword] = useState<string>("");
+  const [password, setPassword] = useRecoilState(passwordState);
 
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);

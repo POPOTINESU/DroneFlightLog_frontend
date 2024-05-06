@@ -7,10 +7,6 @@ export const LoginForm = () => {
     <>
       <h1 className="text-4xl font-bold mb-16">Welcome</h1>
       <LoginInputField />
-      <p className="text-right text-sky-500 text-sm font-bold w-4/6 m-2">
-        パスワードをお忘れですか？
-      </p>
-      <LoginButton />
       <div className="border-t-2 border-dashed w-4/6 mt-10"></div>
       <div className="mt-8 text-sm">
         <span className="bg-white px-2">アカウントをお持ちじゃない場合</span>
