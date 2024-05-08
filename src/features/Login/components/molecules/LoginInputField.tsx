@@ -1,6 +1,6 @@
 "use client";
-import { EmailField } from "../atoms/EmailField";
-import { PasswordField } from "../atoms/PasswordField";
+import { EmailField } from "../atoms/input/EmailField";
+import { PasswordField } from "../atoms/input/PasswordField";
 import { LoginButton } from "../atoms/LoginButton";
 import { RecoilRoot } from "recoil";
 
