@@ -2,7 +2,10 @@
 
 import { ChakraProvider } from '@chakra-ui/react';
 
-export default function Providers({ children}) {
+type ProvidersProps = {
+  children: React.ReactNode;
+}
+export default function Providers({ children}: ProvidersProps) {
   return (
     <ChakraProvider>
       {children}
