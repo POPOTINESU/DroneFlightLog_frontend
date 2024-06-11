@@ -16,7 +16,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { EmailFormInput } from "../molcules/input/emailFormInput/EmailFormInput";
+import { EmailFormInput } from "../molecules/input/emailFormInput/EmailFormInput";
 
 export const LoginForm = () => {
   const [password, setPassword] = useState("");
