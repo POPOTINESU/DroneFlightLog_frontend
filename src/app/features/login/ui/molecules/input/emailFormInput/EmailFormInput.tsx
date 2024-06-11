@@ -10,7 +10,7 @@ export const EmailFormInput = () => {
       <FormLabel marginBottom="0">
         <Text as="b">メールアドレス</Text>
       </FormLabel>
-      <Input id="email" placeholder="メールアドレス" size="lg"/>
+      <Input id="email" placeholder="メールアドレス" size="lg" type="email"/>
     </>
   );
 };

@@ -7,6 +7,7 @@ describe("EmailInputField", () => {
     const { getByText, getByPlaceholderText } = render(<EmailFormInput />);
     const labelElement = getByText("メールアドレス");
     const inputElement = getByPlaceholderText("メールアドレス");
+    expect(inputElement).toHaveAttribute("type", "email");
     expect(labelElement).toBeInTheDocument();
     expect(inputElement).toBeInTheDocument();
   });
