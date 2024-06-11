@@ -1,30 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import {
   Box,
-  Button,
   Center,
   Divider,
   Flex,
   FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
   Heading,
-  Input,
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { EmailFormInput } from "../molecules/input/emailFormInput/EmailFormInput";
+import { PasswordFormInput } from "../molecules/input/passwordFormInput/PasswordFormInput";
+import { LoginButton } from "../atoms/loginButton/LoginButton";
 
 export const LoginForm = () => {
-  const [password, setPassword] = useState("");
-  const isError = password === "";
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   return (
     <Center height="100vh">
@@ -36,23 +26,7 @@ export const LoginForm = () => {
           <EmailFormInput />
         </Box>
         <Box>
-          <FormLabel marginBottom="0">
-            <Text as="b">パスワード</Text>
-          </FormLabel>
-          <Input
-            id="password"
-            type="password"
-            placeholder="パスワード"
-            size="lg"
-            value={password}
-            onChange={handleInputChange}
-          />
-          {!isError ? (
-            <>
-            </>
-          ) : (
-            <FormErrorMessage>Email is required.</FormErrorMessage>
-          )}
+          <PasswordFormInput />
         </Box>
         <Flex justifyContent="flex-end" marginTop="8">
           <Link href="">
@@ -62,9 +36,7 @@ export const LoginForm = () => {
           </Link>
         </Flex>
         <Box marginTop="8" marginBottom="8">
-          <Button size="lg" width="100%" colorScheme="blue" type="submit" >
-            ログイン
-          </Button>
+          <LoginButton />
         </Box>
         <Divider orientation="horizontal" />
         <Flex justifyContent="center" marginTop="8">
