@@ -6,11 +6,12 @@ type InputFieldProps = {
   placeholder?: string;
   size?: string;
   type?: string;
+  width?: string;
 }
 
 export const InputField = (props:InputFieldProps) => {
-  const { placeholder, size, type } = props;
+  const { placeholder, size, type, width } = props;
   return (
-    <Input placeholder={placeholder} size={size} type={type}/>
+    <Input placeholder={placeholder} size={size} type={type} width={width}/>
   )
 }

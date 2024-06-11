@@ -1,16 +1,11 @@
 import React from "react";
-import { InputField } from "../components/atoms/Input/InputField";
 import { Grid, GridItem } from "@chakra-ui/react";
+import { LoginForm } from "../features/login/ui/organisms/LoginForm";
+import { LoginTemplate } from "../features/login/ui/template/LoginTemplate";
 export default function LoginPage() {
   return (
     <>
-      <Grid templateColumns="repeat(26, 1fr)">
-        <GridItem colSpan={16}></GridItem>
-        <GridItem colSpan={10}>
-          <InputField placeholder="メールアドレス" size="lg" />
-          <InputField type="password" placeholder="パスワード" size="lg" />
-        </GridItem>
-      </Grid>
+    <LoginTemplate />
     </>
   );
 }
