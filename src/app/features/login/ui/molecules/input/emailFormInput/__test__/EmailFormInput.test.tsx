@@ -2,15 +2,15 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, fireEvent } from "@testing-library/react";
 import { Formik, Field } from "formik";
-import { PasswordFormInput } from "../PasswordFormInput";
+import { EmailFormInput } from "../EmailFormInput";
 
-describe("PasswordFormInput", () => {
+describe("EmailFormInput", () => {
   const renderWithFormik = (props) => {
     return render(
-      <Formik initialValues={{ password: "" }} onSubmit={jest.fn()}>
+      <Formik initialValues={{ email: "" }} onSubmit={jest.fn()}>
         {() => (
           <form>
-            <Field name="password" component={PasswordFormInput} {...props} />
+            <Field name="email" component={EmailFormInput} {...props} />
             <button type="submit">Submit</button>
           </form>
         )}
@@ -18,13 +18,13 @@ describe("PasswordFormInput", () => {
     );
   };
 
-  const setupPasswordInput = () => {
+  const setupEmailInput = () => {
     const onChange = jest.fn();
     const onBlur = jest.fn();
     const validate = (value) => {
       let error;
       if (!value) {
-        error = "パスワードを入力してください";
+        error = "メールアドレスを入力してください";
       }
       return error;
     };
@@ -35,33 +35,33 @@ describe("PasswordFormInput", () => {
       validate,
     });
 
-    const passwordInput = getByLabelText("パスワード");
-    const input = getByPlaceholderText(/password/);
+    const emailInput = getByLabelText("メールアドレス");
+    const input = getByPlaceholderText(/メールアドレス/);
 
-    return { passwordInput, input, onChange, onBlur };
+    return { emailInput, input, onChange, onBlur };
   };
 
   describe("正常な動作", () => {
     it("レンダリングされる", () => {
-      const { input } = setupPasswordInput();
+      const { input } = setupEmailInput();
       expect(input).toBeInTheDocument();
     });
 
     it("入力値が反映される", () => {
-      const { passwordInput } = setupPasswordInput();
-      fireEvent.change(passwordInput, { target: { value: "password123" } });
-      expect(passwordInput).toHaveValue("password123");
+      const { emailInput } = setupEmailInput();
+      fireEvent.change(emailInput, { target: { value: "example@email.com" } });
+      expect(emailInput).toHaveValue("example@email.com");
     });
 
     it("onChangeが呼ばれる", () => {
-      const { passwordInput, onChange } = setupPasswordInput();
-      fireEvent.change(passwordInput, { target: { value: "password123" } });
+      const { emailInput, onChange } = setupEmailInput();
+      fireEvent.change(emailInput, { target: { value: "example@email.com" } });
       expect(onChange).toHaveBeenCalledTimes(1);
     });
 
     it("onBlurが呼ばれる", () => {
-      const { passwordInput, onBlur } = setupPasswordInput();
-      fireEvent.blur(passwordInput);
+      const { emailInput, onBlur } = setupEmailInput();
+      fireEvent.blur(emailInput);
       expect(onBlur).toHaveBeenCalledTimes(1);
     });
   });
