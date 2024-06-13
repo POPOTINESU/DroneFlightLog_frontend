@@ -9,12 +9,14 @@ import {
   FormErrorMessage,
   Heading,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { EmailFormInput } from "../molecules/input/emailFormInput/EmailFormInput";
 import { PasswordFormInput } from "../molecules/input/passwordFormInput/PasswordFormInput";
 import { LoginButton } from "../atoms/loginButton/LoginButton";
-import { Formik, Form, } from "formik";
+import { Formik, Form } from "formik";
+import { login } from "../../api/login";
 
 export const LoginForm = () => {
   // emailのバリデーション
@@ -37,70 +39,79 @@ export const LoginForm = () => {
   };
 
   return (
-    <Center height="100vh">
-      <Box width="80%" padding="4">
-        <Heading size="2xl" textAlign="center" marginBottom="20">
-          ログイン
-        </Heading>
-        <Formik
-          initialValues={{ email: "", password: "", rememberMe: false }}
-          onSubmit={(values) => {
-            alert(JSON.stringify(values, null, 2));
-          }}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-          }) => (
-            <Form onSubmit={handleSubmit}>
-              <Box marginBottom="8">
-                <FormControl isInvalid={!!errors.email && touched.email}>
-                  <EmailFormInput
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.email}
-                    validate={emailValidate}
-                  />
-                  <FormErrorMessage>{errors.email}</FormErrorMessage>
-                </FormControl>
-              </Box>
-              <Box>
-                <FormControl isInvalid={!!errors.password && touched.password}>
-                  <PasswordFormInput
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.password}
-                    validate={passwordValidate}
-                  />
-                  <FormErrorMessage>{errors.password}</FormErrorMessage>
-                </FormControl>
-              </Box>
-              <Flex justifyContent="flex-end" marginTop="8">
-                <Link href="">
-                  <Text as="b" color="blue.500">
-                    パスワードを忘れた場合はこちら
-                  </Text>
-                </Link>
-              </Flex>
-              <Box marginTop="8" marginBottom="8">
-                <LoginButton />
-              </Box>
-            </Form>
-          )}
-        </Formik>
-        <Divider orientation="horizontal" />
-        <Flex justifyContent="center" marginTop="8">
-          <Link href="">
-            <Text as="b" color="blue.500">
-              新規登録はこちら
-            </Text>
-          </Link>
-        </Flex>
-      </Box>
-    </Center>
+    <VStack>
+      <Center height="100vh">
+        <Box width="80%" padding="4">
+          <Heading size="2xl" textAlign="center" marginBottom="20">
+            ログイン
+          </Heading>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            onSubmit={async (values) => {
+              const isLogin = await login(values);
+              if (isLogin) {
+                alert("ログインに成功しました");
+              } else {
+                alert("ログインに失敗しました");
+              }
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <Box marginBottom="8">
+                  <FormControl isInvalid={!!errors.email && touched.email}>
+                    <EmailFormInput
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      validate={emailValidate}
+                    />
+                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                  </FormControl>
+                </Box>
+                <Box>
+                  <FormControl
+                    isInvalid={!!errors.password && touched.password}
+                  >
+                    <PasswordFormInput
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      validate={passwordValidate}
+                    />
+                    <FormErrorMessage>{errors.password}</FormErrorMessage>
+                  </FormControl>
+                </Box>
+                <Flex justifyContent="flex-end" marginTop="8">
+                  <Link href="">
+                    <Text as="b" color="blue.500">
+                      パスワードを忘れた場合はこちら
+                    </Text>
+                  </Link>
+                </Flex>
+                <Box marginTop="8" marginBottom="8">
+                  <LoginButton />
+                </Box>
+              </Form>
+            )}
+          </Formik>
+          <Divider orientation="horizontal" />
+          <Flex justifyContent="center" marginTop="8">
+            <Link href="">
+              <Text as="b" color="blue.500">
+                新規登録はこちら
+              </Text>
+            </Link>
+          </Flex>
+        </Box>
+      </Center>
+    </VStack>
   );
 };
