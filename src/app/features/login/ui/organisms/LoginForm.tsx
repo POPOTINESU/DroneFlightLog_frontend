@@ -1,80 +1,120 @@
 "use client";
 
-import { useState } from "react";
 import {
   Box,
-  Button,
   Center,
   Divider,
   Flex,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
-  FormLabel,
   Heading,
-  Input,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { EmailFormInput } from "../molecules/input/emailFormInput/EmailFormInput";
+import { PasswordFormInput } from "../molecules/input/passwordFormInput/PasswordFormInput";
+import { LoginButton } from "../atoms/loginButton/LoginButton";
+import { Formik, Form } from "formik";
+import { login } from "../../api/login";
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
-  const [password, setPassword] = useState("");
-  const isError = password === "";
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const router = useRouter();
+  // emailのバリデーション
+  const emailValidate = (value: string) => {
+    let error;
+    if (!value) {
+      error = "メールアドレスを入力してください";
+    } else if (!value.includes("@")) {
+      error = "メールアドレスの形式が正しくありません";
+    }
+    return error;
+  };
+  // passwordのバリデーション
+  const passwordValidate = (value: string) => {
+    let error;
+    if (!value) {
+      error = "パスワードを入力してください";
+    }
+    return error;
   };
 
   return (
-    <Center height="100vh">
-      <FormControl width="80%" padding="4">
-        <Heading size="2xl" textAlign="center" marginBottom="20">
-          ログイン
-        </Heading>
-        <Box marginBottom="8">
-          <EmailFormInput />
-        </Box>
-        <Box>
-          <FormLabel marginBottom="0">
-            <Text as="b">パスワード</Text>
-          </FormLabel>
-          <Input
-            id="password"
-            type="password"
-            placeholder="パスワード"
-            size="lg"
-            value={password}
-            onChange={handleInputChange}
-          />
-          {!isError ? (
-            <>
-            </>
-          ) : (
-            <FormErrorMessage>Email is required.</FormErrorMessage>
-          )}
-        </Box>
-        <Flex justifyContent="flex-end" marginTop="8">
-          <Link href="">
-            <Text as="b" color="blue.500">
-              パスワードを忘れた場合はこちら
-            </Text>
-          </Link>
-        </Flex>
-        <Box marginTop="8" marginBottom="8">
-          <Button size="lg" width="100%" colorScheme="blue" type="submit" >
+    <VStack>
+      <Center height="100vh">
+        <Box width="80%" padding="4">
+          <Heading size="2xl" textAlign="center" marginBottom="20">
             ログイン
-          </Button>
+          </Heading>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            onSubmit={async (values) => {
+              const isLogin = await login(values);
+              if (isLogin === 200) {
+                // ログインに成功したらトップページに遷移
+                router.push("/");
+              } else {
+                alert("ログイン失敗");
+              }
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <Box marginBottom="8">
+                  <FormControl isInvalid={!!errors.email && touched.email}>
+                    <EmailFormInput
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      validate={emailValidate}
+                    />
+                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                  </FormControl>
+                </Box>
+                <Box>
+                  <FormControl
+                    isInvalid={!!errors.password && touched.password}
+                  >
+                    <PasswordFormInput
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      validate={passwordValidate}
+                    />
+                    <FormErrorMessage>{errors.password}</FormErrorMessage>
+                  </FormControl>
+                </Box>
+                <Flex justifyContent="flex-end" marginTop="8">
+                  <Link href="">
+                    <Text as="b" color="blue.500">
+                      パスワードを忘れた場合はこちら
+                    </Text>
+                  </Link>
+                </Flex>
+                <Box marginTop="8" marginBottom="8">
+                  <LoginButton />
+                </Box>
+              </Form>
+            )}
+          </Formik>
+          <Divider orientation="horizontal" />
+          <Flex justifyContent="center" marginTop="8">
+            <Link href="">
+              <Text as="b" color="blue.500">
+                新規登録はこちら
+              </Text>
+            </Link>
+          </Flex>
         </Box>
-        <Divider orientation="horizontal" />
-        <Flex justifyContent="center" marginTop="8">
-          <Link href="">
-            <Text as="b" color="blue.500">
-              新規登録はこちら
-            </Text>
-          </Link>
-        </Flex>
-      </FormControl>
-    </Center>
+      </Center>
+    </VStack>
   );
 };

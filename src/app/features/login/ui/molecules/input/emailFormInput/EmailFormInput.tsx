@@ -1,26 +1,36 @@
 import React from "react";
 import { Input } from "@chakra-ui/react";
-import { FormLabel, Text } from "@chakra-ui/react";
+import { FormLabel } from "@chakra-ui/react";
+import { Field } from "formik";
 
 type EmailFormInputProps = {
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+  validate: (value: string) => string | undefined;
 };
 
-
-export const EmailFormInput = (props:EmailFormInputProps) => {
-  const { onChange } = props;
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange(e);
-    }
-  };
-  
+export const EmailFormInput = (props: EmailFormInputProps) => {
+  const { onChange, value, onBlur, validate } = props;
+  //Form内のコンポーネントなのでonChangeは不要
   return (
     <>
-      <FormLabel marginBottom="0">
-        <Text as="b">メールアドレス</Text>
+      <FormLabel htmlFor="email" marginBottom="0">
+        メールアドレス
+        <Field
+          as={Input}
+          id="email"
+          autoComplete="email"
+          placeholder="メールアドレス"
+          size="lg"
+          type="email"
+          name="email"
+          onChange={onChange}
+          onBlur={onBlur}
+          value={value}
+          validate={validate}
+        />
       </FormLabel>
-      <Input id="email" placeholder="メールアドレス" size="lg" onChange={handleChange}/>
     </>
   );
 };
