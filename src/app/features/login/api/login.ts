@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { Axios, isAxiosError } from "axios";
 
 type LoginProps = {
   email: string;
@@ -11,8 +11,18 @@ export const login = async (props: LoginProps) => {
     email: email,
     password: password,
   };
-  const res = await axios.post("/login", data, {
-    withCredentials: true,
-  });
-  return res;
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/authentications/login`,
+      data,
+      {
+        withCredentials: true,
+      }
+    );
+    return response;
+  } catch (error) {
+    if(isAxiosError(error)){
+      return error.response;
+    }
+  }
 };
