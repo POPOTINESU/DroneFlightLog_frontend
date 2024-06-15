@@ -19,10 +19,10 @@ export const login = async (props: LoginProps) => {
         withCredentials: true,
       }
     );
-    return response;
+    return response.status;
   } catch (error) {
     if(isAxiosError(error)){
-      return error.response;
+      return error.response?.status;
     }
   }
 };

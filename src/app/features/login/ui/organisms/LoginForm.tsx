@@ -17,8 +17,10 @@ import { PasswordFormInput } from "../molecules/input/passwordFormInput/Password
 import { LoginButton } from "../atoms/loginButton/LoginButton";
 import { Formik, Form } from "formik";
 import { login } from "../../api/login";
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
+  const router = useRouter();
   // emailのバリデーション
   const emailValidate = (value: string) => {
     let error;
@@ -49,10 +51,11 @@ export const LoginForm = () => {
             initialValues={{ email: "", password: "" }}
             onSubmit={async (values) => {
               const isLogin = await login(values);
-              if (isLogin) {
-                alert("ログインに成功しました");
+              if (isLogin === 200) {
+                // ログインに成功したらトップページに遷移
+                router.push("/");
               } else {
-                alert("ログインに失敗しました");
+                alert("ログイン失敗");
               }
             }}
           >
