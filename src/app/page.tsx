@@ -1,11 +1,10 @@
 import { Box, Heading, Text, Input } from "@chakra-ui/react";
+import { LoginTemplate } from "./features/login/ui/template/LoginTemplate";
 
 export default function Home() {
   return (
     <Box>
-      <Heading>Welcome to my app</Heading>
-      <Text>This is a Chakra UI example.</Text>
-      <Input placeholder="Type something here" size="lg" type="password" />
+      <LoginTemplate />
     </Box>
   );
 }
