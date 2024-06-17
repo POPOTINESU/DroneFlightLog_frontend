@@ -1,7 +1,10 @@
-import React from 'react'
+import React from "react";
+import { FlightLogTable } from "../organisms/FlightLogTable";
 
 export const FlightLogTemplate = () => {
   return (
-    <div>FlightLogTemplate</div>
-  )
-}
+    <div>
+      <FlightLogTable />
+    </div>
+  );
+};
