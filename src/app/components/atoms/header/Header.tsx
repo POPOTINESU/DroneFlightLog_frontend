@@ -5,7 +5,7 @@ import React from "react";
 export const Header = () => {
   return (
     <>
-      <Flex>
+      <Flex alignItems="center" height="100%">
         <Text ml={6} as="b">
           Drone Flight Log
         </Text>
