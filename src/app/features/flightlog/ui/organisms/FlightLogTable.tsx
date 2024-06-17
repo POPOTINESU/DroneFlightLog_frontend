@@ -66,7 +66,7 @@ export const FlightLogTable = () => {
         </Card>
       </GridItem>
       <GridItem colSpan={10} pr={5} height="100%">
-        <Card p={10} m={2} width="100%" height="100%" my="auto">
+        <Card p={{base:3,'2xl':10}} m={2} width="100%" height="100%" my="auto">
           <CardHeader p="0">
             <Center>
               <Heading size="lg">検索</Heading>
