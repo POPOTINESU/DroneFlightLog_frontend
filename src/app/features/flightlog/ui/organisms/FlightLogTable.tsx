@@ -35,7 +35,13 @@ const data = {
 
 export const FlightLogTable = () => {
   return (
-    <Grid templateColumns="repeat(26, 1fr)" gap={6} height="90vh" py="20px" px="15px">
+    <Grid
+      templateColumns="repeat(26, 1fr)"
+      gap={6}
+      height="90vh"
+      py="20px"
+      px="15px"
+    >
       <GridItem colSpan={16} px={10} height="100%">
         <HStack>
           <Heading size="lg">飛行記録</Heading>
@@ -60,12 +66,77 @@ export const FlightLogTable = () => {
         </Card>
       </GridItem>
       <GridItem colSpan={10} pr={5} height="100%">
-        <Card mb="auto" height="100%">
-          <CardHeader>
-            <Heading size="2xl">検索</Heading>
+        <Card p={10} m={2} width="100%" height="100%" my="auto">
+          <CardHeader p="0">
+            <Center>
+              <Heading size="lg">検索</Heading>
+            </Center>
           </CardHeader>
-          <CardBody>
-            <Text>aaaaa</Text>
+          <CardBody pt={0}>
+            <Text>検索キーワード</Text>
+            <InputGroup>
+              <InputLeftAddon height="32px">
+                <IoSearch />
+              </InputLeftAddon>
+              <Input borderLeftRadius="0" size="sm" />
+            </InputGroup>
+            <Box mt={{ base: 4, "2xl": 8 }}>
+              <Text>機体番号</Text>
+              <Input boxShadow="base" size={{ base: "sm", "2xl": "md" }} />
+            </Box>
+            <Box mt={{ base: 4, "2xl": 8 }}>
+              <Text>操縦者</Text>
+              <Input boxShadow="base" size={{ base: "sm", "2xl": "md" }} />
+            </Box>
+            <Box mt={{ base: 4, "2xl": 8 }}>
+              <Text>飛行日</Text>
+              <HStack>
+                <Input
+                  type="date"
+                  boxShadow="base"
+                  size={{ base: "sm", "2xl": "md" }}
+                />
+                <Text>~</Text>
+                <Input
+                  type="date"
+                  boxShadow="base"
+                  size={{ base: "sm", "2xl": "md" }}
+                />
+              </HStack>
+            </Box>
+            <Box mt={{ base: 4, "2xl": 8 }}>
+              <Text>飛行時刻</Text>
+              <HStack>
+                <Input
+                  type="time"
+                  boxShadow="base"
+                  size={{ base: "sm", "2xl": "md" }}
+                />
+                <Text>~</Text>
+                <Input
+                  type="time"
+                  boxShadow="base"
+                  size={{ base: "sm", "2xl": "md" }}
+                />
+              </HStack>
+            </Box>
+            <Box mt={{ base: 4, "2xl": 8 }}>
+              <Text>離陸地点</Text>
+              <Input boxShadow="base" size={{ base: "sm", "2xl": "md" }} />
+            </Box>
+            <Box mt={{ base: 4, "2xl": 8 }}>
+              <Text>着陸地点</Text>
+              <Input boxShadow="base" size={{ base: "sm", "2xl": "md" }} />
+            </Box>
+            <Button
+              colorScheme="blue"
+              width="100%"
+              boxShadow="lg"
+              mt="6"
+              size={{ base: "md", "2xl": "md" }}
+            >
+              検索
+            </Button>
           </CardBody>
         </Card>
       </GridItem>
