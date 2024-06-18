@@ -1,5 +1,4 @@
 import Providers from './providers';
-import { Link } from '@chakra-ui/react';
 
 export default function RootLayout({
   children,
