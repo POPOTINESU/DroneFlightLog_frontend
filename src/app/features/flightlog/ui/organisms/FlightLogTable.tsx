@@ -35,7 +35,7 @@ const data = {
 
 export const FlightLogTable = () => {
   return (
-    <Grid templateColumns="repeat(26, 1fr)" height="92vh">
+    <Grid templateColumns="repeat(26, 1fr)" >
       <GridItem colSpan={16} padding={3} height="100%" >
         <HStack>
           <Heading size="lg">飛行記録</Heading>
