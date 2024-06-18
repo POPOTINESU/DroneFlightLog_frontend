@@ -35,14 +35,8 @@ const data = {
 
 export const FlightLogTable = () => {
   return (
-    <Grid
-      templateColumns="repeat(26, 1fr)"
-      gap={6}
-      height="90vh"
-      py="20px"
-      px="15px"
-    >
-      <GridItem colSpan={16} px={10} height="100%">
+    <Grid templateColumns="repeat(26, 1fr)" height="92vh">
+      <GridItem colSpan={16} padding={3} height="100%" >
         <HStack>
           <Heading size="lg">飛行記録</Heading>
           <Spacer />
@@ -65,20 +59,15 @@ export const FlightLogTable = () => {
           </HStack>
         </Card>
       </GridItem>
-      <GridItem colSpan={10} pr={5} height="100%">
-        <Card p={{base:3,'2xl':10}} m={2} width="100%" height="100%" my="auto">
-          <CardHeader p="0">
-            <Center>
-              <Heading size="lg">検索</Heading>
-            </Center>
+      <GridItem colSpan={10} height="100%" padding={3}>
+        <Card height="100%" border="1px" borderColor="gray.50" px={5}>
+          <CardHeader>
+            <Heading textAlign="center">検索</Heading>
           </CardHeader>
-          <CardBody pt={0}>
-            <Text>検索キーワード</Text>
-            <InputGroup>
-              <InputLeftAddon height="32px">
-                <IoSearch />
-              </InputLeftAddon>
-              <Input borderLeftRadius="0" size="sm" />
+          <CardBody>
+            <InputGroup size="sm">
+              <InputLeftAddon children={<IoSearch />} />
+              <Input borderLeftRadius="0" />
             </InputGroup>
             <Box mt={{ base: 4, "2xl": 8 }}>
               <Text>機体番号</Text>

@@ -17,10 +17,10 @@ export default function FlightLogLayout({
         h="100vh"
         fontWeight="bold"
       >
-        <GridItem p="3"  bg="black" color="white" area={"header"} height="8vh">
+        <GridItem  bg="black" color="white" area={"header"} height="8vh">
           <Header />
         </GridItem>
-        <GridItem p="3" bg="gray.100" area={"main"} height="92vh">
+        <GridItem  bg="gray.100" area={"main"} >
           {children}
         </GridItem>
       </Grid>
