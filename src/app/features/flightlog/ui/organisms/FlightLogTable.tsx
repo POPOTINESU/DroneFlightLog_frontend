@@ -12,13 +12,10 @@ import {
   Box,
   CardBody,
   CardHeader,
-  Center,
-  Flex,
 } from "@chakra-ui/react";
 import React from "react";
 import { Input } from "@chakra-ui/react";
 import { IoSearch } from "react-icons/io5";
-import { Header } from "@/app/components/atoms/header/Header";
 
 const data = {
   flightDate: "2021/09/01",
@@ -35,8 +32,8 @@ const data = {
 
 export const FlightLogTable = () => {
   return (
-    <Grid templateColumns="repeat(26, 1fr)" >
-      <GridItem colSpan={16} padding={3} height="100%" >
+    <Grid templateColumns="repeat(26, 1fr)">
+      <GridItem colSpan={16} padding={3} height="100%">
         <HStack>
           <Heading size="lg">飛行記録</Heading>
           <Spacer />
