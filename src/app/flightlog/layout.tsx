@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Center, Grid, GridItem } from "@chakra-ui/react";
-import { Header } from "../components/atoms/header/Header";
+import { Header } from "../components/header/Header";
 
 export default function FlightLogLayout({
   children,
@@ -17,10 +17,10 @@ export default function FlightLogLayout({
         h="100vh"
         fontWeight="bold"
       >
-        <GridItem  bg="black" color="white" area={"header"} height="8vh">
+        <GridItem bg="black" color="white" area={"header"} height="8vh">
           <Header />
         </GridItem>
-        <GridItem  bg="gray.100" area={"main"} >
+        <GridItem bg="gray.100" area={"main"} height="92vh">
           {children}
         </GridItem>
       </Grid>
