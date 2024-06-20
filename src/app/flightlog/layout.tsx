@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Center, Grid, GridItem } from "@chakra-ui/react";
-import { Header } from "../components/header/Header";
+import { Header } from "../features/header/Header";
 
 export default function FlightLogLayout({
   children,

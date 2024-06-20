@@ -24,10 +24,27 @@ import {
 import Link from "next/link";
 import { useRef } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { DeleteJWTToken } from "./api/logout/DeleteJWTToken";
+import { IoIosLogOut } from "react-icons/io";
 
 export const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef<HTMLButtonElement>(null);
+
+  const handleLogout = async () => {
+    try {
+      const response: number | undefined = await DeleteJWTToken();
+
+      if (response === 200) {
+        window.location.href = "/";
+      } else {
+        alert("ログアウトに失敗しました");
+      }
+    } catch (error) {
+      console.error("ログアウトエラー:", error);
+      alert("ログアウトに失敗しました");
+    }
+  };
 
   return (
     <>
@@ -83,7 +100,17 @@ export const Header = () => {
                 </MenuList>
               </Menu>
               <Box>
-                <Button>ログアウト</Button>
+                <Button
+                  color="white"
+                  background="black"
+                  colorScheme="black"
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                >
+                  <Icon as={IoIosLogOut} mr={2}/>
+                  ログアウト
+                </Button>
               </Box>
             </DrawerBody>
           </DrawerContent>
