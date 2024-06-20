@@ -24,7 +24,7 @@ import {
 import Link from "next/link";
 import { useRef } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { DeleteJWTToken } from "./logout/DeleteJWTToken";
+import { DeleteJWTToken } from "./api/logout/DeleteJWTToken";
 import { IoIosLogOut } from "react-icons/io";
 
 export const Header = () => {
