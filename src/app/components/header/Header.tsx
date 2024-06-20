@@ -11,6 +11,7 @@ import {
   DrawerOverlay,
   Flex,
   Grid,
+  Icon,
   IconButton,
   Menu,
   MenuButton,
@@ -20,7 +21,6 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { color } from "framer-motion";
 import Link from "next/link";
 import { useRef } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -31,28 +31,27 @@ export const Header = () => {
 
   return (
     <>
-      <Flex alignItems="center" height="100%">
-        <Text ml={6} as="b">
-          Drone Flight Log
-        </Text>
+      <Flex alignItems="center" height="100%" px={10}>
+        <Text as="b">Drone Flight Log</Text>
         <Spacer />
         <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-          <Link href="">
+          <Link href="/flightlog">
             <Text textAlign={"center"}>飛行記録</Text>
           </Link>
           <Link href="">日常点検記録</Link>
           <Link href="">点検整備記録</Link>
           <Link href="/flightlog/groups">グループ一覧</Link>
         </Grid>
-        <IconButton
+        <Button
           aria-label="HamburgerMenu"
           background="black"
-          color="red.white"
+          color="white"
           colorScheme="black"
-          icon={<GiHamburgerMenu />}
           ref={btnRef}
           onClick={onOpen}
-        />
+        >
+          <GiHamburgerMenu size="1.5rem" />
+        </Button>
         <Drawer
           isOpen={isOpen}
           placement="right"
@@ -61,7 +60,7 @@ export const Header = () => {
         >
           <DrawerOverlay />
           <DrawerContent background="black">
-            <DrawerCloseButton />
+            <DrawerCloseButton color="white" />
             <DrawerHeader>
               <Spacer />
             </DrawerHeader>
@@ -77,7 +76,7 @@ export const Header = () => {
                 </MenuButton>
                 <MenuList>
                   <MenuItem>
-                    <Link href="/flightlog/group">飛行記録</Link>
+                    <Link href="/flightlog/groups">飛行記録</Link>
                   </MenuItem>
                   <MenuItem>グループ名</MenuItem>
                   <MenuItem>グループ名</MenuItem>
