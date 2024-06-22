@@ -107,7 +107,7 @@ export const LoginForm = () => {
           </Formik>
           <Divider orientation="horizontal" />
           <Flex justifyContent="center" marginTop="8">
-            <Link href="">
+            <Link href="/signup">
               <Text as="b" color="blue.500">
                 新規登録はこちら
               </Text>
