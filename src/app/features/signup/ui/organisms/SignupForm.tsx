@@ -86,7 +86,7 @@ export const SignupForm = () => {
                   const isSignup = await signup(values);
                   if (isSignup === 200) {
                     // 新規登録に成功したらログインページに遷移
-                    router.push("/login");
+                    router.push("/");
                   } else {
                     alert("新規登録失敗");
                   }

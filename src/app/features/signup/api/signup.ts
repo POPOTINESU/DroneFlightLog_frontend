@@ -12,9 +12,13 @@ export const signup = async (props: SignupProps) => {
   /**
    * 新規館員登録
    *
+   * POST /api/v1/authentications/signup
+   * 
+   * Rails側での命名がキャメルケースになっているので注意
+   * 
    * Args:
-   *  firstName
-   *  lastName
+   *  first_name
+   *  last_name
    *  email
    *  password
    *
@@ -24,8 +28,8 @@ export const signup = async (props: SignupProps) => {
 
   const { firstName, lastName, email, password } = props;
   const data = {
-    firstName: firstName,
-    lastName: lastName,
+    first_name: firstName,
+    last_name: lastName,
     email: email,
     password: password,
   };
