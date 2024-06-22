@@ -53,7 +53,7 @@ export const LoginForm = () => {
               const isLogin = await login(values);
               if (isLogin === 200) {
                 // ログインに成功したらトップページに遷移
-                router.push("/flightlog");
+                router.push("/");
               } else {
                 alert("ログイン失敗");
               }

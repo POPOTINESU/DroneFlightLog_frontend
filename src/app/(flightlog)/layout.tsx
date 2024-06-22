@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Center, Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
+import Providers from "../providers";
 import { Header } from "../features/header/Header";
 
 export default function FlightLogLayout({
@@ -8,7 +8,7 @@ export default function FlightLogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <Providers>
       <Grid
         templateAreas={`"header"
                   "main"
@@ -24,6 +24,6 @@ export default function FlightLogLayout({
           {children}
         </GridItem>
       </Grid>
-    </>
+    </Providers>
   );
 }
