@@ -7,7 +7,7 @@ export const PasswordFormInput = (props: FormInputType) => {
   const { onChange, value, onBlur, validate } = props;
   return (
     <>
-      <FormLabel htmlFor="password">パスワード</FormLabel>
+      <FormLabel htmlFor="password">パスワード
       <Field
         as={Input}
         id="password"
@@ -21,6 +21,7 @@ export const PasswordFormInput = (props: FormInputType) => {
         value={value}
         validate={validate}
       />
+      </FormLabel>
     </>
   );
 };
