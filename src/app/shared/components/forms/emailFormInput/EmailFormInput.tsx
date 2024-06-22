@@ -8,7 +8,6 @@ import { FormInputType } from '../FormInputType';
 
 export const EmailFormInput = (props: FormInputType) => {
   const { onChange, value, onBlur, validate } = props;
-  //Form内のコンポーネントなのでonChangeは不要
   return (
     <>
       <FormLabel htmlFor="email" marginBottom="0">
@@ -17,7 +16,7 @@ export const EmailFormInput = (props: FormInputType) => {
           as={Input}
           id="email"
           autoComplete="email"
-          placeholder="メールアドレス"
+          placeholder="example@mail.com"
           size="lg"
           type="email"
           name="email"
