@@ -2,15 +2,11 @@ import React from "react";
 import { Input } from "@chakra-ui/react";
 import { FormLabel } from "@chakra-ui/react";
 import { Field } from "formik";
+import { FormInputType } from '../FormInputType';
 
-type EmailFormInputProps = {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
-  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
-  validate: (value: string) => string | undefined;
-};
 
-export const EmailFormInput = (props: EmailFormInputProps) => {
+
+export const EmailFormInput = (props: FormInputType) => {
   const { onChange, value, onBlur, validate } = props;
   //Form内のコンポーネントなのでonChangeは不要
   return (
