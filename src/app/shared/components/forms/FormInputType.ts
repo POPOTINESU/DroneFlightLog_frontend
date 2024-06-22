@@ -1,4 +1,3 @@
-import { Form } from 'formik';
 export type FormInputType = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;

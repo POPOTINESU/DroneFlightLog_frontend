@@ -1,30 +1,38 @@
+import React from "react";
 import axios, { isAxiosError } from "axios";
 
-type LoginProps = {
+type SignupProps = {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 };
 
-export const login = async (props: LoginProps) => {
+export const signup = async (props: SignupProps) => {
   /**
-   * ログイン処理
+   * 新規館員登録
    *
    * Args:
+   *  firstName
+   *  lastName
    *  email
    *  password
-   *  withCredentials
    *
    * Returns:
    * status
    */
-  const { email, password } = props;
+
+  const { firstName, lastName, email, password } = props;
   const data = {
+    firstName: firstName,
+    lastName: lastName,
     email: email,
     password: password,
   };
+
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/authentications/login`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/authentications/signup`,
       data,
       {
         withCredentials: true,

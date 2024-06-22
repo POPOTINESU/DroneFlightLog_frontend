@@ -17,8 +17,11 @@ import {
 import { Form, Formik } from "formik";
 import { FirstNameInput } from "../molecules/Input/FistName/FirstNameInput";
 import { LastNameInput } from "../molecules/Input/LastName/LastNameInput";
+import { signup } from "../../api/signup";
+import { useRouter } from "next/navigation";
 
 export const SignupForm = () => {
+  const router = useRouter();
   const firstNameValidate = (value: string) => {
     let error;
     if (!value) {
@@ -55,10 +58,6 @@ export const SignupForm = () => {
     return error;
   };
 
-  const handleSubmit = async (values: any) => {
-    console.log(values);
-  };
-
   return (
     <Box
       display="flex"
@@ -84,7 +83,13 @@ export const SignupForm = () => {
                   password: "",
                 }}
                 onSubmit={async (values) => {
-                  console.log(values);
+                  const isSignup = await signup(values);
+                  if (isSignup === 200) {
+                    // 新規登録に成功したらログインページに遷移
+                    router.push("/login");
+                  } else {
+                    alert("新規登録失敗");
+                  }
                 }}
               >
                 {({
@@ -96,7 +101,7 @@ export const SignupForm = () => {
                   handleSubmit,
                   isSubmitting,
                 }) => (
-                  <Form>
+                  <Form onSubmit={handleSubmit}>
                     <Flex>
                       <FormControl
                         isInvalid={!!errors.lastName && touched.lastName}
@@ -168,9 +173,6 @@ export const SignupForm = () => {
                       colorScheme="blue"
                       type="submit"
                       isLoading={isSubmitting}
-                      onClick={() => {
-                        handleSubmit;
-                      }}
                       marginTop={4}
                     >
                       新規登録
