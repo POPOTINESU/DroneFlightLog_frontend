@@ -52,12 +52,12 @@ export const Header = () => {
         <Text as="b">Drone Flight Log</Text>
         <Spacer />
         <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-          <Link href="/flightlog">
+          <Link href="/">
             <Text textAlign={"center"}>飛行記録</Text>
           </Link>
           <Link href="">日常点検記録</Link>
           <Link href="">点検整備記録</Link>
-          <Link href="/flightlog/groups">グループ一覧</Link>
+          <Link href="groups">グループ一覧</Link>
         </Grid>
         <Button
           aria-label="HamburgerMenu"
@@ -93,7 +93,7 @@ export const Header = () => {
                 </MenuButton>
                 <MenuList>
                   <MenuItem>
-                    <Link href="/flightlog/groups">飛行記録</Link>
+                    <Link href="">飛行記録</Link>
                   </MenuItem>
                   <MenuItem>グループ名</MenuItem>
                   <MenuItem>グループ名</MenuItem>

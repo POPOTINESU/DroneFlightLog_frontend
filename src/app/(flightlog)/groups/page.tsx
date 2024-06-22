@@ -1,5 +1,5 @@
 "use client";
-import { fetchGroupList } from "@/app/features/flightlog/user/api/FetchGroupList";
+import { fetchGroupList } from "@/app/features/flightlog/api/user/FetchGroupList";
 import {
   Box,
   Card,

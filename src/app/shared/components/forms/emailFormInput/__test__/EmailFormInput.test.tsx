@@ -36,7 +36,7 @@ describe("EmailFormInput", () => {
     });
 
     const emailInput = getByLabelText("メールアドレス");
-    const input = getByPlaceholderText(/メールアドレス/);
+    const input = getByPlaceholderText(/example@mail.com/);
 
     return { emailInput, input, onChange, onBlur };
   };

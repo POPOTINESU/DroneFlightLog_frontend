@@ -12,8 +12,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { EmailFormInput } from "../molecules/input/emailFormInput/EmailFormInput";
-import { PasswordFormInput } from "../molecules/input/passwordFormInput/PasswordFormInput";
+import { EmailFormInput } from "../../../../shared/components/forms/emailFormInput/EmailFormInput";
+import { PasswordFormInput } from "../../../../shared/components/forms/passwordFormInput/PasswordFormInput";
 import { LoginButton } from "../atoms/loginButton/LoginButton";
 import { Formik, Form } from "formik";
 import { login } from "../../api/login";
@@ -53,7 +53,7 @@ export const LoginForm = () => {
               const isLogin = await login(values);
               if (isLogin === 200) {
                 // ログインに成功したらトップページに遷移
-                router.push("/flightlog");
+                router.push("/");
               } else {
                 alert("ログイン失敗");
               }
@@ -107,7 +107,7 @@ export const LoginForm = () => {
           </Formik>
           <Divider orientation="horizontal" />
           <Flex justifyContent="center" marginTop="8">
-            <Link href="">
+            <Link href="/signup">
               <Text as="b" color="blue.500">
                 新規登録はこちら
               </Text>

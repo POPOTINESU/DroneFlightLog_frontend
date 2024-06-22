@@ -1,4 +1,4 @@
-import axios, { Axios, isAxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 
 type LoginProps = {
   email: string;
@@ -6,6 +6,17 @@ type LoginProps = {
 };
 
 export const login = async (props: LoginProps) => {
+  /**
+   * ログイン処理
+   *
+   * Args:
+   *  email
+   *  password
+   *  withCredentials
+   *
+   * Returns:
+   * status
+   */
   const { email, password } = props;
   const data = {
     email: email,
@@ -21,7 +32,7 @@ export const login = async (props: LoginProps) => {
     );
     return response.status;
   } catch (error) {
-    if(isAxiosError(error)){
+    if (isAxiosError(error)) {
       return error.response?.status;
     }
   }
