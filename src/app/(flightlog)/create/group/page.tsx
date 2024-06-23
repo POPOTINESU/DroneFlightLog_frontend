@@ -1,7 +1,9 @@
+import { CreateGroupTemplate } from "@/app/features/create/group/ui/template/CreateGroupTemplate";
+
 export default function CreateGroupPage() {
   return (
-    <div>
-      <h1>CreateGroupPage</h1>
-    </div>
+    <>
+      <CreateGroupTemplate />
+    </>
   );
 }
