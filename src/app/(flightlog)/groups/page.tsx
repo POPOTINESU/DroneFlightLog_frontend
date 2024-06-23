@@ -39,7 +39,6 @@ export default function GroupPage() {
       console.log(data);
     });
   }, []);
-  // TODO: drone_count導入
   return (
     <Center height="100%">
       <Box width="70%" height="100%">
