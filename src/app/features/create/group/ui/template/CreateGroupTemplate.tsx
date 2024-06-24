@@ -3,22 +3,10 @@ import {
   Box,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
-  Center,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
   VStack,
 } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
 import React from "react";
-import { DroneNumberInputField } from "../molecules/DroneNumberInputField";
-import { GroupNameInputField } from "../molecules/GroupNameInputField";
-import { JUNumberInputField } from "../molecules/JUNumberInputField";
-import { PurchaseDateInputField } from "../molecules/PurchaseDateInputField";
 import { RecoilRoot, useRecoilState } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
 import { Step1 } from "../organisms/Step1";

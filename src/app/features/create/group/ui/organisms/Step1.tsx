@@ -1,4 +1,12 @@
-import { Flex, FormControl, FormErrorMessage } from "@chakra-ui/react";
+"use client";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Textarea,
+} from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React from "react";
 import { GroupNameInputField } from "../molecules/GroupNameInputField";
@@ -16,21 +24,45 @@ export const Step1 = () => {
     }
     return error;
   };
-  const emailValidate = (value: string) => {
+
+  const validateEmails = (value: string) => {
     let error;
     if (!value) {
       error = "メールアドレスを入力してください";
-    } else if (!value.includes("@")) {
-      error = "メールアドレスの形式が正しくありません";
+    } else {
+      const emailArray = value.split(",").map((email) => email.trim());
+      emailArray.forEach((email, index) => {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          error = `メールアドレスの形式が正しくありません (${index + 1})`;
+        }
+      });
     }
     return error;
   };
 
   return (
     <Formik
-      initialValues={{ groupName: "", email: "" }}
+      initialValues={{
+        groupName: "",
+        emails: "",
+      }}
+      validate={(values) => {
+        const errors: { groupName?: string; emails?: string } = {};
+        const groupNameError = GroupNameValidate(values.groupName);
+        if (groupNameError) {
+          errors.groupName = groupNameError;
+        }
+        const emailError = validateEmails(values.emails);
+        if (emailError) {
+          errors.emails = emailError;
+        }
+        return errors;
+      }}
       onSubmit={(values) => {
-        console.log(values);
+        const emailArray = values.emails
+          .split(",")
+          .map((email) => email.trim());
+        console.log({ groupName: values.groupName, emailArray });
       }}
     >
       {({
@@ -43,7 +75,7 @@ export const Step1 = () => {
         isSubmitting,
       }) => (
         <Form>
-          <Flex>
+          <Box mb={8}>
             <FormControl isInvalid={!!errors.groupName && touched.groupName}>
               <GroupNameInputField
                 onChange={handleChange}
@@ -53,16 +85,35 @@ export const Step1 = () => {
               />
               <FormErrorMessage>{errors.groupName}</FormErrorMessage>
             </FormControl>
-            <FormControl isInvalid={!!errors.groupName && touched.groupName}>
-              <GroupNameInputField
+          </Box>
+          <Box my={2} maxHeight="160px">
+            <FormControl isInvalid={!!errors.emails && touched.emails}>
+              <FormLabel htmlFor="emails" marginBottom="0">
+                招待するユーザーのメールアドレス
+              </FormLabel>
+              <Textarea
+                name="emails"
+                value={values.emails}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.groupName}
-                validate={GroupNameValidate}
+                placeholder="複数入力の場合は、カンマ区切りで入力してください"
+                rows={5}
+                resize="none"
               />
-              <FormErrorMessage>{errors.groupName}</FormErrorMessage>
+              <FormErrorMessage>{errors.emails}</FormErrorMessage>
             </FormControl>
-          </Flex>
+          </Box>
+
+          <Button
+            width="100%"
+            type="submit"
+            colorScheme="blue"
+            mt={4}
+            isLoading={isSubmitting}
+            onClick={() => handleSubmit()}
+          >
+            次へ
+          </Button>
         </Form>
       )}
     </Formik>
