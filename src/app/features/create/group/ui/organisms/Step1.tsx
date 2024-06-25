@@ -8,8 +8,10 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GroupNameInputField } from "../molecules/GroupNameInputField";
+import { FormStepState } from "../../state/FormStepState";
+import { useRecoilState } from "recoil";
 
 /**
  * グループ名と、招待相手のメールアドレスを入力するフォーム
@@ -17,6 +19,22 @@ import { GroupNameInputField } from "../molecules/GroupNameInputField";
  * ページ移動する前にバリデーションを行い、sessionに保存する
  */
 export const Step1 = () => {
+  const [step, setStep] = useRecoilState(FormStepState);
+  const [initialValues, setInitialValues] = useState({
+    groupName: "",
+    emails: "",
+  });
+
+  useEffect(() => {
+    const groupNameSessionData = sessionStorage.getItem("groupName");
+    const emails = sessionStorage.getItem("emails");
+
+    setInitialValues({
+      groupName: groupNameSessionData ? groupNameSessionData : "",
+      emails: emails ? JSON.parse(emails).join("\n") : "",
+    });
+  }, []);
+
   const GroupNameValidate = (value: string) => {
     let error;
     if (!value) {
@@ -30,7 +48,7 @@ export const Step1 = () => {
     if (!value) {
       error = "メールアドレスを入力してください";
     } else {
-      const emailArray = value.split(",").map((email) => email.trim());
+      const emailArray = value.split("\n").map((email) => email.trim());
       emailArray.forEach((email, index) => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           error = `メールアドレスの形式が正しくありません (${index + 1})`;
@@ -42,10 +60,8 @@ export const Step1 = () => {
 
   return (
     <Formik
-      initialValues={{
-        groupName: "",
-        emails: "",
-      }}
+      enableReinitialize={true}
+      initialValues={initialValues}
       validate={(values) => {
         const errors: { groupName?: string; emails?: string } = {};
         const groupNameError = GroupNameValidate(values.groupName);
@@ -60,9 +76,15 @@ export const Step1 = () => {
       }}
       onSubmit={(values) => {
         const emailArray = values.emails
-          .split(",")
+          .split("\n")
           .map((email) => email.trim());
-        console.log({ groupName: values.groupName, emailArray });
+
+        //データをセッションに保存する
+        sessionStorage.setItem("groupName", values.groupName);
+        sessionStorage.setItem("emails", JSON.stringify(emailArray));
+
+        //次のステップに移動
+        setStep(2);
       }}
     >
       {({
@@ -72,10 +94,11 @@ export const Step1 = () => {
         handleChange,
         handleBlur,
         handleSubmit,
+        setFieldValue,
         isSubmitting,
       }) => (
         <Form>
-          <Box mb={8}>
+          <Box mb={5}>
             <FormControl isInvalid={!!errors.groupName && touched.groupName}>
               <GroupNameInputField
                 onChange={handleChange}
@@ -96,7 +119,7 @@ export const Step1 = () => {
                 value={values.emails}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="複数入力の場合は、カンマ区切りで入力してください"
+                placeholder="複数入力の場合は、改行で入力してください"
                 rows={5}
                 resize="none"
               />

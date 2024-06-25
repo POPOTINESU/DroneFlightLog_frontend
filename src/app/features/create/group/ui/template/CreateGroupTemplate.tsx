@@ -4,10 +4,11 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Heading,
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import { RecoilRoot, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
 import { Step1 } from "../organisms/Step1";
 import { Step2 } from "../organisms/Step2";
@@ -36,7 +37,9 @@ export const CreateGroupTemplate = () => {
     >
       <Card width="50%" height="auto" py={10}>
         <VStack>
-          <CardHeader>新規グループ作成</CardHeader>
+          <CardHeader>
+            <Heading size="lg">新規グループ作成</Heading>
+          </CardHeader>
           <CardBody>{step === 1 ? <Step1 /> : <Step2 />}</CardBody>
         </VStack>
       </Card>
