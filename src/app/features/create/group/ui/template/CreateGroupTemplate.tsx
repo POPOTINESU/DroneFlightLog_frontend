@@ -7,8 +7,8 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
-import { useRecoilState } from "recoil";
+import React, { useEffect } from "react";
+import { useRecoilValue } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
 import { Step1 } from "../organisms/Step1";
 import { Step2 } from "../organisms/Step2";
@@ -22,25 +22,39 @@ import { Step2 } from "../organisms/Step2";
  * Step2: 機体の情報
  */
 export const CreateGroupTemplate = () => {
-  // TODO: フォームのバリデーションを実装する
   // TODO: APIの作成
 
   // stepが1の時はStep1を表示、2の時はStep2を表示する
-  const [step, setStep] = useRecoilState(FormStepState);
+  const step = useRecoilValue(FormStepState);
+
+  // create/groupがアンマウントされるとsessionStorageのデータを削除する
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem("groupName");
+      sessionStorage.removeItem("emails");
+      sessionStorage.removeItem("droneNumber");
+      sessionStorage.removeItem("JUNumber");
+      sessionStorage.removeItem("purchaseDate");
+    };
+  }, []);
+
   return (
     <Box
       display="flex"
       justifyContent="center"
       alignItems="center"
-      height="100%"
+      height="100%" // 画面全体の高さを指定
+      padding={30}
       background="gray.100"
     >
-      <Card width="50%" height="auto" py={10}>
-        <VStack>
+      <Card width="50%" height="100%" py={30} overflowY="auto"> {/* カードの高さを80vhに設定 */}
+        <VStack spacing={4}>
           <CardHeader>
             <Heading size="lg">新規グループ作成</Heading>
           </CardHeader>
-          <CardBody>{step === 1 ? <Step1 /> : <Step2 />}</CardBody>
+          <CardBody width="100%"> {/* カードボディに幅を設定 */}
+            {step === 1 ? <Step1 /> : <Step2 />}
+          </CardBody>
         </VStack>
       </Card>
     </Box>

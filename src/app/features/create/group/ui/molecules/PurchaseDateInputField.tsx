@@ -15,7 +15,7 @@ export const PurchaseDateInputField = (props: FormInputType) => {
           id="purchaseDate"
           autoComplete="purchaseDate"
           placeholder="グループ名"
-          size="lg"
+          size="md"
           type="date"
           name="purchaseDate"
           onChange={onChange}

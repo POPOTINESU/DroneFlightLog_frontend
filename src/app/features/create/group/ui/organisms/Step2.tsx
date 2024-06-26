@@ -1,83 +1,172 @@
-import { Button, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { Field, FieldArray, Form, Formik } from "formik";
 import React from "react";
-import { FormStepState } from "../../state/FormStepState";
-import { useRecoilState } from "recoil";
-import { Form, Formik } from "formik";
-import { PurchaseDateInputField } from "../molecules/PurchaseDateInputField";
 import { DroneNumberInputField } from "../molecules/DroneNumberInputField";
+import * as Yup from "yup";
+import { JUNumberInputField } from "../molecules/JUNumberInputField";
+import { PurchaseDateInputField } from "../molecules/PurchaseDateInputField";
 
 export const Step2 = () => {
-  const [step, setStep] = useRecoilState(FormStepState);
-  const handlePrevStep = () => {
-    //stepを１に戻してsessionに保存する
-    setStep(1);
-  }
-  const droneNumberValidate = (value: string) => {
-    let error;
-    if (!value) {
-      error = "ドローン番号を入力してください";
-    }
-    return error;
-  };
-  const purchaseDateValidate = (value: string) => {
-    let error;
-    if (!value) {
-      error = "購入日を入力してください";
-    }
-    return error;
-  };
+  //TODO: 個別のバリデーションがうまく行かないので対応する
+  // valueは、うまくきていそう
+
+  // const droneNumberValidate = (value: string) => {
+  //   let error;
+
+  //   if (!value) {
+  //     error = "ドローン番号を入力してください";
+  //   }
+  //   return error;
+  // };
+
+  const ValidationSchema = Yup.object().shape({
+    sets: Yup.array().of(
+      Yup.object().shape({
+        droneNumber: Yup.string().required("ドローン番号を入力してください"),
+        JUNumber: Yup.string().required("機体登録番号を入力してください")
+        // JUから始まる
+        .matches(/JU/, "機体登録番号はJUから始まる番号を入力してください"),
+        purchaseDate: Yup.string().required("購入日を入力してください"),
+      })
+    ),
+  });
 
   return (
-    <Formik
-      initialValues={{ droneNumber: "", JUNumber: "", purchaseDate: "" }}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
-    >
-      {({
-        handleSubmit,
-        handleChange,
-        handleBlur,
-        values,
-        errors,
-        touched,
-      }) => (
-        <Form onSubmit={handleSubmit}>
-          <FormControl isInvalid={!!errors.droneNumber && touched.droneNumber}>
-            <DroneNumberInputField
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.droneNumber}
-              validate={purchaseDateValidate}
-            />
-            <FormErrorMessage>{errors.droneNumber}</FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={!!errors.JUNumber && touched.JUNumber}>
-            <DroneNumberInputField
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.JUNumber}
-              validate={purchaseDateValidate}
-            />
-            <FormErrorMessage>{errors.JUNumber}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl
-            isInvalid={!!errors.purchaseDate && touched.purchaseDate}
-          >
-            <PurchaseDateInputField
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.purchaseDate}
-              validate={purchaseDateValidate}
-            />
-            <FormErrorMessage>{errors.purchaseDate}</FormErrorMessage>
-          </FormControl>
-
-          <Button onClick={handlePrevStep}>前へ</Button>
-          <Button type="submit">作成</Button>
-        </Form>
-      )}
-    </Formik>
+    <Box>
+      <Formik
+        initialValues={{
+          sets: [{ droneNumber: "", JUNumber: "", purchaseDate: "" }],
+        }}
+        validationSchema={ValidationSchema}
+        validateOnBlur={true}
+        validateOnChange={true}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
+      >
+        {({
+          handleSubmit,
+          handleChange,
+          handleBlur,
+          values,
+          errors,
+          touched,
+          validateField,
+        }) => (
+          <Box>
+            <Form onSubmit={handleSubmit}>
+              <FieldArray name="sets">
+                {({ insert, remove, push }) => (
+                  <Box>
+                    {values.sets.map((set, index) => (
+                      <Box key={index}>
+                        <Box>
+                          <Field name={`sets[${index}].droneNumber`}>
+                            {({ field, form, meta }: any) => (
+                              <FormControl
+                                isInvalid={meta.touched && !!meta.error}
+                              >
+                                <DroneNumberInputField
+                                  {...field}
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                  ) => {
+                                    handleChange(e);
+                                    form.setFieldValue(
+                                      field.name,
+                                      e.target.value
+                                    );
+                                  }}
+                                  onBlur={async (
+                                    e: React.FocusEvent<HTMLInputElement>
+                                  ) => {
+                                    handleBlur(e);
+                                    await validateField(field.name);
+                                  }}
+                                />
+                                <FormErrorMessage>
+                                  {meta.error}
+                                </FormErrorMessage>
+                              </FormControl>
+                            )}
+                          </Field>
+                        </Box>
+                        <Box>
+                          <Field name={`sets[${index}].JUNumber`}>
+                            {({ field, form, meta }: any) => (
+                              <FormControl
+                                isInvalid={meta.touched && !!meta.error}
+                              >
+                                <JUNumberInputField
+                                  {...field}
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                  ) => {
+                                    handleChange(e);
+                                    form.setFieldValue(
+                                      field.name,
+                                      e.target.value
+                                    );
+                                  }}
+                                />
+                                <FormErrorMessage>
+                                  {meta.error}
+                                </FormErrorMessage>
+                              </FormControl>
+                            )}
+                          </Field>
+                        </Box>
+                        <Box>
+                          <Field name={`sets[${index}].purchaseDate`}>
+                            {({ field, form, meta }: any) => (
+                              <FormControl
+                                isInvalid={meta.touched && !!meta.error}
+                              >
+                                <PurchaseDateInputField
+                                  {...field}
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                  ) => {
+                                    handleChange(e);
+                                    form.setFieldValue(
+                                      field.name,
+                                      e.target.value
+                                    );
+                                  }}
+                                />
+                                <FormErrorMessage>
+                                  {meta.error}
+                                </FormErrorMessage>
+                              </FormControl>
+                            )}
+                          </Field>
+                        </Box>
+                      </Box>
+                    ))}
+                    <Flex justifyContent="flex-end" m={2}>
+                      <Button
+                        onClick={() =>
+                          push({
+                            droneNumber: "",
+                            JUNumber: "",
+                            purchaseDate: "",
+                          })
+                        }
+                        colorScheme="blue"
+                      >
+                        追加
+                      </Button>
+                    </Flex>
+                  </Box>
+                )}
+              </FieldArray>
+              <Button type="submit" width="100%" colorScheme="blue">
+                グループ作成
+              </Button>
+            </Form>
+          </Box>
+        )}
+      </Formik>
+    </Box>
   );
 };

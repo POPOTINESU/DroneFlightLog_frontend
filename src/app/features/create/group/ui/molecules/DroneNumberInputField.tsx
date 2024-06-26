@@ -15,7 +15,7 @@ export const DroneNumberInputField = (props: FormInputType) => {
           id="droneNumber"
           autoComplete="droneNumber"
           placeholder="製造番号"
-          size="lg"
+          size="md"
           type="droneNumber"
           name="droneNumber"
           onChange={onChange}

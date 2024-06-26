@@ -15,7 +15,7 @@ export const JUNumberInputField = (props: FormInputType) => {
           id="JUNumber"
           autoComplete="JUNumber"
           placeholder="JU〇〇〇〇〇〇〇〇〇〇"
-          size="lg"
+          size="md"
           type="JUNumber"
           name="JUNumber"
           onChange={onChange}

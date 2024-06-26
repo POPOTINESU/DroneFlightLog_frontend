@@ -15,7 +15,7 @@ export const GroupNameInputField = (props: FormInputType) => {
           id="groupName"
           autoComplete="groupName"
           placeholder="グループ名"
-          size="lg"
+          size="md"
           type="groupName"
           name="groupName"
           onChange={onChange}
