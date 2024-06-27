@@ -1,34 +1,39 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+} from "@chakra-ui/react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import React from "react";
 import { DroneNumberInputField } from "../molecules/DroneNumberInputField";
 import * as Yup from "yup";
 import { JUNumberInputField } from "../molecules/JUNumberInputField";
 import { PurchaseDateInputField } from "../molecules/PurchaseDateInputField";
-import { create } from "domain";
+
 import { createGroup } from "../../api/createGroup";
-import { GiConsoleController } from "react-icons/gi";
+import { useRecoilState } from "recoil";
+import { FormStepState } from "../../state/FormStepState";
+import { useRouter } from "next/navigation";
+
 
 export const Step2 = () => {
-  //TODO: 個別のバリデーションがうまく行かないので対応する
-  // valueは、うまくきていそう
-
-  // const droneNumberValidate = (value: string) => {
-  //   let error;
-
-  //   if (!value) {
-  //     error = "ドローン番号を入力してください";
-  //   }
-  //   return error;
-  // };
+  const router = useRouter();
+  const [step, setStep] = useRecoilState(FormStepState);
+  const handlePrevStep = () => {
+    // 1つ前のステップに戻る
+    setStep(step - 1);
+  };
 
   const ValidationSchema = Yup.object().shape({
     sets: Yup.array().of(
       Yup.object().shape({
         droneNumber: Yup.string().required("ドローン番号を入力してください"),
-        JUNumber: Yup.string().required("機体登録番号を入力してください")
-        // JUから始まる
-        .matches(/JU/, "機体登録番号はJUから始まる番号を入力してください"),
+        JUNumber: Yup.string()
+          .required("機体登録番号を入力してください")
+          // JUから始まる
+          .matches(/JU/, "機体登録番号はJUから始まる番号を入力してください"),
         purchaseDate: Yup.string().required("購入日を入力してください"),
       })
     ),
@@ -43,10 +48,15 @@ export const Step2 = () => {
         validationSchema={ValidationSchema}
         validateOnBlur={true}
         validateOnChange={true}
-        onSubmit={async(values) => {
+        onSubmit={async (values) => {
           // sessionからデータを取得
-          const response = await createGroup({values});
-
+          const response = await createGroup({ values });
+          if (response === 201) {
+            router.push("/");
+          } else {
+            // グループの作成に失敗したら、アラートを表示する
+            alert("グループの作成に失敗しました");
+          }
         }}
       >
         {({
@@ -54,8 +64,6 @@ export const Step2 = () => {
           handleChange,
           handleBlur,
           values,
-          errors,
-          touched,
           validateField,
         }) => (
           <Box>
@@ -148,7 +156,7 @@ export const Step2 = () => {
                         </Box>
                       </Box>
                     ))}
-                    <Flex justifyContent="flex-end" m={2}>
+                    <Flex justifyContent="flex-end" m={2} gap={2}>
                       <Button
                         onClick={() =>
                           push({
@@ -161,13 +169,28 @@ export const Step2 = () => {
                       >
                         追加
                       </Button>
+                      <Button
+                        onClick={() => remove(values.sets.length - 1)}
+                        colorScheme="red"
+                      >
+                        削除
+                      </Button>
                     </Flex>
                   </Box>
                 )}
               </FieldArray>
-              <Button type="submit" width="100%" colorScheme="blue">
-                グループ作成
-              </Button>
+              <Flex gap={2}>
+                <Button
+                  width="100%"
+                  colorScheme="gray"
+                  onClick={handlePrevStep}
+                >
+                  戻る
+                </Button>
+                <Button type="submit" width="100%" colorScheme="blue">
+                  グループ作成
+                </Button>
+              </Flex>
             </Form>
           </Box>
         )}

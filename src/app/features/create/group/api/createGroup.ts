@@ -36,7 +36,7 @@ export const createGroup = async (props: CreateGroupProps) => {
   const emails = sessionStorage.getItem("emails");
 
   const data = {
-    groupName: groupName,
+    name: groupName,
     emails: emails,
     droneSets: values.sets,
   };
@@ -47,7 +47,7 @@ export const createGroup = async (props: CreateGroupProps) => {
 
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/group/create`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/groups`,
       data,
       {
         withCredentials: true,

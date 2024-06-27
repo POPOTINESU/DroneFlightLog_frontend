@@ -47,7 +47,7 @@ export const CreateGroupTemplate = () => {
       padding={30}
       background="gray.100"
     >
-      <Card width="50%" height="100%" py={30} overflowY="auto"> {/* カードの高さを80vhに設定 */}
+      <Card width="50%" height="100%" py={30} px={10} overflowY="auto"> {/* カードの高さを80vhに設定 */}
         <VStack spacing={4}>
           <CardHeader>
             <Heading size="lg">新規グループ作成</Heading>
