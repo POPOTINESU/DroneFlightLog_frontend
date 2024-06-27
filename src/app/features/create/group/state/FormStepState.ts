@@ -7,7 +7,7 @@ import { recoilPersist } from 'recoil-persist'
 
 const {persistAtom} = recoilPersist({
   key: "formStep",
-  storage: sessionStorage,
+  storage: typeof window === "undefined" ? undefined : sessionStorage,
 });
 
 export const FormStepState = atom({
