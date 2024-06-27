@@ -5,6 +5,9 @@ import { DroneNumberInputField } from "../molecules/DroneNumberInputField";
 import * as Yup from "yup";
 import { JUNumberInputField } from "../molecules/JUNumberInputField";
 import { PurchaseDateInputField } from "../molecules/PurchaseDateInputField";
+import { create } from "domain";
+import { createGroup } from "../../api/createGroup";
+import { GiConsoleController } from "react-icons/gi";
 
 export const Step2 = () => {
   //TODO: 個別のバリデーションがうまく行かないので対応する
@@ -40,8 +43,10 @@ export const Step2 = () => {
         validationSchema={ValidationSchema}
         validateOnBlur={true}
         validateOnChange={true}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async(values) => {
+          // sessionからデータを取得
+          const response = await createGroup({values});
+
         }}
       >
         {({

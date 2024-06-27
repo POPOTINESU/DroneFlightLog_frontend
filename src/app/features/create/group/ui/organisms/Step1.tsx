@@ -94,7 +94,6 @@ export const Step1 = () => {
         handleChange,
         handleBlur,
         handleSubmit,
-        setFieldValue,
         isSubmitting,
       }) => (
         <Form>
