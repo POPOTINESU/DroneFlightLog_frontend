@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { GroupNameInputField } from "../molecules/GroupNameInputField";
 import { FormStepState } from "../../state/FormStepState";
 import { useRecoilState } from "recoil";
+import { NextStepButton } from "../atoms/StepButton/NextStepButton";
 
 /**
  * グループ名と、招待相手のメールアドレスを入力するフォーム
@@ -125,17 +126,10 @@ export const Step1 = () => {
               <FormErrorMessage>{errors.emails}</FormErrorMessage>
             </FormControl>
           </Box>
-
-          <Button
-            width="100%"
-            type="submit"
-            colorScheme="blue"
-            mt={4}
-            isLoading={isSubmitting}
-            onClick={() => handleSubmit()}
-          >
-            次へ
-          </Button>
+          <NextStepButton
+            isSubmitting={isSubmitting}
+            handleSubmit={handleSubmit}
+          />
         </Form>
       )}
     </Formik>

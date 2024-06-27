@@ -8,7 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState} from "recoil";
 import { FormStepState } from "../../state/FormStepState";
 import { Step1 } from "../organisms/Step1";
 import { Step2 } from "../organisms/Step2";
@@ -22,14 +22,13 @@ import { Step2 } from "../organisms/Step2";
  * Step2: 機体の情報
  */
 export const CreateGroupTemplate = () => {
-  // TODO: APIの作成
-
   // stepが1の時はStep1を表示、2の時はStep2を表示する
-  const step = useRecoilValue(FormStepState);
+  const [step, setStep] = useRecoilState(FormStepState);
 
   // create/groupがアンマウントされるとsessionStorageのデータを削除する
   useEffect(() => {
     return () => {
+      setStep(1);
       sessionStorage.removeItem("groupName");
       sessionStorage.removeItem("emails");
       sessionStorage.removeItem("droneNumber");
