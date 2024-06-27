@@ -1,5 +1,21 @@
 import React from "react";
 import axios, { isAxiosError } from "axios";
+/**
+ * 新規館員登録
+ *
+ * POST /api/v1/authentications/signup
+ *
+ * Rails側での命名がキャメルケースになっているので注意
+ *
+ * Args:
+ *  first_name
+ *  last_name
+ *  email
+ *  password
+ *
+ * Returns:
+ * status
+ */
 
 type SignupProps = {
   firstName: string;
@@ -9,23 +25,6 @@ type SignupProps = {
 };
 
 export const signup = async (props: SignupProps) => {
-  /**
-   * 新規館員登録
-   *
-   * POST /api/v1/authentications/signup
-   * 
-   * Rails側での命名がキャメルケースになっているので注意
-   * 
-   * Args:
-   *  first_name
-   *  last_name
-   *  email
-   *  password
-   *
-   * Returns:
-   * status
-   */
-
   const { firstName, lastName, email, password } = props;
   const data = {
     first_name: firstName,

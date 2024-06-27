@@ -3,6 +3,7 @@ import { Input } from "@chakra-ui/react";
 import { FormLabel } from "@chakra-ui/react";
 import { Field } from "formik";
 import { FormInputType } from '../FormInputType';
+import { EmailField } from "./atoms/EmailField";
 
 
 
@@ -12,18 +13,11 @@ export const EmailFormInput = (props: FormInputType) => {
     <>
       <FormLabel htmlFor="email" marginBottom="0">
         メールアドレス
-        <Field
-          as={Input}
-          id="email"
-          autoComplete="email"
-          placeholder="example@mail.com"
-          size="lg"
-          type="email"
-          name="email"
-          onChange={onChange}
-          onBlur={onBlur}
-          value={value}
-          validate={validate}
+        <EmailField 
+        onChange={onChange}
+        value={value}
+        onBlur={onBlur}
+        validate={validate}
         />
       </FormLabel>
     </>

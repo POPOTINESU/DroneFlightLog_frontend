@@ -93,7 +93,7 @@ export const Header = () => {
                 </MenuButton>
                 <MenuList>
                   <MenuItem>
-                    <Link href="">飛行記録</Link>
+                    <Link href="/create/group">グループ追加</Link>
                   </MenuItem>
                   <MenuItem>グループ名</MenuItem>
                   <MenuItem>グループ名</MenuItem>

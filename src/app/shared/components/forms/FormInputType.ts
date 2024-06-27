@@ -3,4 +3,5 @@ export type FormInputType = {
   value: string;
   onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
   validate: (value: string) => string | undefined;
+  name?: string;
 };

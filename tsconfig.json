@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "jest.config.js", "src/app/(flightlog)/loading.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "jest.config.js", "src/app/(flightlog)/loading.js", "src/app/features/create/group/ui/atoms/StepButton"],
   "exclude": ["node_modules","out",".next","**/*.test.ts","**/*.test.tsx"]
 }
