@@ -110,7 +110,7 @@ export const CreateDroneForm = () => {
               <FieldArray name="sets">
                 {({ remove, push }) => (
                   <Box>
-                    {values.sets.map((set,index) => (
+                    {values.sets.map((set, index) => (
                       <Box key={index}>
                         <Box>
                           <Field name={`sets[${index}].droneNumber`}>

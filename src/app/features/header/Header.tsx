@@ -57,7 +57,7 @@ export const Header = () => {
           </Link>
           <Link href="">日常点検記録</Link>
           <Link href="">点検整備記録</Link>
-          <Link href="groups">グループ一覧</Link>
+          <Link href="/groups">グループ一覧</Link>
         </Grid>
         <Button
           aria-label="HamburgerMenu"

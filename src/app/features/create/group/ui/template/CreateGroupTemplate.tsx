@@ -8,7 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useRecoilState} from "recoil";
+import { useRecoilState } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
 import { Step1 } from "../organisms/Step1";
 import { Step2 } from "../organisms/Step2";
@@ -38,24 +38,13 @@ export const CreateGroupTemplate = () => {
   }, []);
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="100%" // 画面全体の高さを指定
-      padding={30}
-      background="gray.100"
-    >
-      <Card width="50%" height="100%" py={30} px={10} overflowY="auto"> {/* カードの高さを80vhに設定 */}
-        <VStack spacing={4}>
-          <CardHeader>
-            <Heading size="lg">新規グループ作成</Heading>
-          </CardHeader>
-          <CardBody width="100%"> {/* カードボディに幅を設定 */}
-            {step === 1 ? <Step1 /> : <Step2 />}
-          </CardBody>
-        </VStack>
-      </Card>
-    </Box>
+    <>
+      <CardHeader>
+        <Heading size="lg">新規グループ作成</Heading>
+      </CardHeader>
+      <CardBody width="100%">
+        {step === 1 ? <Step1 /> : <Step2 />}
+      </CardBody>
+    </>
   );
 };
