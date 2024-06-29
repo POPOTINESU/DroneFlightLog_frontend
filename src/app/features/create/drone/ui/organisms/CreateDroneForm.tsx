@@ -5,6 +5,7 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   Select,
   Stack,
 } from "@chakra-ui/react";
@@ -16,7 +17,8 @@ import { DroneNumberInputField } from "../../../group/ui/molecules/DroneNumberIn
 import { JUNumberInputField } from "../../../group/ui/molecules/JUNumberInputField";
 import * as Yup from "yup";
 import { fetchGroupList } from "@/app/features/flightlog/api/group/FetchGroupList";
-import { GroupNameInputField } from "../../../group/ui/molecules/GroupNameInputField";
+import { useRouter } from "next/navigation";
+import { createDrone } from "../../api/createDrone";
 
 export const CreateDroneForm = () => {
   const ValidationSchema = Yup.object().shape({
@@ -29,7 +31,7 @@ export const CreateDroneForm = () => {
         purchaseDate: Yup.string().required("購入日を入力してください"),
       })
     ),
-    groupName: Yup.string().required("グループ名を選択してください"),
+    groupID: Yup.string().required("グループ名を選択してください"),
   });
 
   type Group = {
@@ -38,6 +40,8 @@ export const CreateDroneForm = () => {
     user_count: number;
     drone_count: number;
   };
+
+  const router = useRouter();
 
   const [groupList, setGroupList] = useState<Group[]>([]);
 
@@ -52,13 +56,18 @@ export const CreateDroneForm = () => {
       <Formik
         initialValues={{
           sets: [{ droneNumber: "", JUNumber: "", purchaseDate: "" }],
-          groupName: "",
+          groupID: "",
         }}
         validationSchema={ValidationSchema}
         validateOnBlur={true}
         validateOnChange={true}
         onSubmit={async (values) => {
-          console.log(values);
+          const response = await createDrone({ values });
+          if (response === 201) {
+            router.push("/");
+          } else {
+            alert("ドローンの作成に失敗しました");
+          }
         }}
       >
         {({
@@ -69,22 +78,25 @@ export const CreateDroneForm = () => {
           errors,
           touched,
           validateField,
+          setFieldValue,
         }) => (
           <Box>
             <Form onSubmit={handleSubmit}>
               <Stack spacing={5}>
-                <FormControl
-                  isInvalid={!!errors.groupName && touched.groupName}
-                >
+                <FormControl isInvalid={!!errors.groupID && touched.groupID}>
+                  <FormLabel>グループ名</FormLabel>
                   <Select
-                    name="groupName"
-                    value={values.groupName}
-                    onChange={handleChange}
+                    name="groupID"
+                    value={values.groupID}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldValue("groupID", e.target.value);
+                    }}
                     placeholder="グループ名を選択してください"
                   >
                     {groupList && groupList.length > 0 ? (
                       groupList.map((group: Group) => (
-                        <option key={group.id} value={group.name}>
+                        <option key={group.id} value={group.id}>
                           {group.name}
                         </option>
                       ))
@@ -92,13 +104,13 @@ export const CreateDroneForm = () => {
                       <option>グループが見つかりませんでした</option>
                     )}
                   </Select>
-                  <FormErrorMessage>{errors.groupName}</FormErrorMessage>
+                  <FormErrorMessage>{errors.groupID}</FormErrorMessage>
                 </FormControl>
               </Stack>
               <FieldArray name="sets">
-                {({ insert, remove, push }) => (
+                {({ remove, push }) => (
                   <Box>
-                    {values.sets.map((set, index) => (
+                    {values.sets.map((set,index) => (
                       <Box key={index}>
                         <Box>
                           <Field name={`sets[${index}].droneNumber`}>

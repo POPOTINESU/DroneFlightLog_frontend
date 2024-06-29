@@ -1,3 +1,4 @@
+
 import { CreateDroneTemplate } from '@/app/features/create/drone/ui/template/CreateDroneTemplate'
 import React from 'react'
 
