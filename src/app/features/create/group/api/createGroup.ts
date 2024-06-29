@@ -39,10 +39,6 @@ export const createGroup = async (props: CreateGroupProps) => {
     emails: emails,
     droneSets: values.sets,
   };
-  console.log(data);
-  /**sample_data:
-   *{groupName: "test", emails: "test@test", droneSets: Array(1)}
-   */
 
   try {
     const response = await axios.post(
