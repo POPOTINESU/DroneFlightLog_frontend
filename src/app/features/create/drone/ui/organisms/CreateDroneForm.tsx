@@ -12,7 +12,7 @@ import {
 import { Form, Formik, Field, FieldArray } from "formik";
 import React, { useEffect, useState } from "react";
 import { PurchaseDateInputField } from "../../../group/ui/molecules/PurchaseDateInputField";
-import { SubmitButton } from "../../../group/ui/atoms/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../../../../shared/components/atoms/SubmitButton/SubmitButton";
 import { DroneNumberInputField } from "../../../group/ui/molecules/DroneNumberInputField";
 import { JUNumberInputField } from "../../../group/ui/molecules/JUNumberInputField";
 import * as Yup from "yup";

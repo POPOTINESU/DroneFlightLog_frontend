@@ -1,5 +1,5 @@
 import { FormInputType } from '@/app/shared/components/forms/FormInputType'
-import { FormControl, FormLabel, Input } from '@chakra-ui/react'
+import { FormControl, FormLabel, Input, Textarea } from '@chakra-ui/react'
 import { Field } from 'formik'
 import React from 'react'
 
@@ -10,7 +10,7 @@ export const FlightSummaryInputField = (props: FormInputType) => {
     <FormLabel htmlFor="flightSummary" marginBottom="0">
       飛行概要
       <Field
-        as={Input}
+        as={Textarea}
         id="flightSummary"
         autoComplete="flightSummary"
         placeholder="飛行概要"
@@ -21,6 +21,8 @@ export const FlightSummaryInputField = (props: FormInputType) => {
         onBlur={onBlur}
         value={value}
         validate={validate}
+        rows={5}
+        resize="none"
       />
     </FormLabel>
     </>

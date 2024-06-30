@@ -1,6 +1,7 @@
 "use client";
 import {
   Box,
+  Button,
   Card,
   Checkbox,
   CheckboxGroup,
@@ -13,23 +14,23 @@ import {
   Select,
   Switch,
   Text,
-  VStack,
 } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import React, { useEffect, useCallback, useRef, useState } from "react";
 import { FlightDateInputField } from "../molecules/FlightDateInputField";
-import { PilotNameInputField } from "../molecules/PilotNameInputField";
-import { SubmitButton } from "../../../group/ui/atoms/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../../../../shared/components/atoms/SubmitButton/SubmitButton";
 import { TakeOffTimeInputField } from "../molecules/TakeOffTimeInputField";
 import { LandingTimeInputField } from "../molecules/LandingTimeInputField";
 import { TotalTimeInputField } from "../molecules/TotalTimeInputField";
 import { FlightSummaryInputField } from "../molecules/FlightSummaryInputField";
 
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { SelectedGroupState } from "@/app/features/header/state/SelectedGroupState";
 import { handleCalcTime } from "../../utility/handleCalcTime";
 import { fetchGroupDetail } from "../../../group/api/fetchGroupDetail";
-import { GroupListState } from "@/app/features/header/state/GroupListState";
+
+import { FlightPurpose } from "../organisms/FlightPurpose";
+import { currentLocation } from "../../api/currentLocation";
 
 /**
  * 新規飛行記録作成
@@ -57,18 +58,63 @@ type GroupDetail = {
   }[];
 };
 
+type GeoLocation = {
+  coords: {
+    latitude: number;
+    longitude: number;
+  };
+};
+
+type Location = {
+  latitude: number;
+  longitude: number;
+};
+
 export const CreateFlightLogTemplate = () => {
   const [specificFlight, setSpecificFlight] = useState(false);
   const [selectedGroup, setSelectedGroup] = useRecoilState(SelectedGroupState);
   const [groupDetail, setGroupDetail] = useState<GroupDetail | null>(null);
   const [clientName, setClientName] = useState("");
 
+  const [prefecture, setPrefecture] = useState<string | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleCurrentLocation = useCallback(async (setFieldValue: any) => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position: GeoLocation) => {
+          const loc = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+          setLocation(loc);
+          try {
+            const addressData = await currentLocation(loc);
+            const address = addressData.address.split(" ");
+            // 都道府県以降の住所を取得する
+            const region = address[1];
+            setPrefecture(region);
+            setFieldValue("takeoff_location", region);
+            setFieldValue("landing_location", region);
+          } catch (error) {
+            setError("Failed to fetch address information.");
+          }
+        },
+        (error) => {
+          setError(error.message);
+        }
+      );
+    } else {
+      setError("Geolocation is not available");
+    }
+  }, []);
+
   useEffect(() => {
     const fetchGroup = async () => {
       setClientName(selectedGroup.name);
       try {
         const groupID = selectedGroup.id;
-        console.log(groupID);
         const data = await fetchGroupDetail({ id: groupID });
 
         setGroupDetail(data);
@@ -116,6 +162,8 @@ export const CreateFlightLogTemplate = () => {
           totalTime: "",
           presence_of_malfunction: "",
           malfunction_content: "",
+          flightPurpose: [],
+          specificFlightTypes: [],
         }}
         onSubmit={(values) => {
           console.log(values);
@@ -161,11 +209,20 @@ export const CreateFlightLogTemplate = () => {
                 <FormControl
                   isInvalid={!!errors.pilotName && touched.pilotName}
                 >
-                  <FormLabel>操縦者名</FormLabel>
-                  <Select>
+                  <FormLabel mb={0}>操縦者名</FormLabel>
+                  <Select
+                    name="pilotName"
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldValue("pilotName", e.target.value);
+                    }}
+                    onBlur={handleBlur}
+                    value={values.pilotName}
+                  >
+                    <option>操縦者を選択してください</option>
                     {groupDetail && groupDetail.users.length > 0 ? (
                       groupDetail.users.map((user) => (
-                        <option key={user.email} value={user.email}>
+                        <option key={user.name} value={user.name}>
                           {user.name}
                         </option>
                       ))
@@ -173,14 +230,22 @@ export const CreateFlightLogTemplate = () => {
                       <option>ユーザーが登録されていません</option>
                     )}
                   </Select>
-
                   <FormErrorMessage>{errors.pilotName}</FormErrorMessage>
                 </FormControl>
               </Box>
               <Box>
                 <FormControl>
                   <FormLabel mb={0}>機体登録番号</FormLabel>
-                  <Select>
+                  <Select
+                    name="JU_number"
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldValue("JU_number", e.target.value);
+                    }}
+                    onBlur={handleBlur}
+                    value={values.JU_number}
+                  >
+                    <option>機体を選択してください</option>
                     {groupDetail && groupDetail.drones.length > 0 ? (
                       groupDetail.drones.map((drone) => (
                         <option key={drone.id} value={drone.id}>
@@ -205,36 +270,11 @@ export const CreateFlightLogTemplate = () => {
                   <FormErrorMessage>{errors.flightSummary}</FormErrorMessage>
                 </FormControl>
                 <FormControl>
-                  <FormLabel mb={0}>飛行目的</FormLabel>
-                  <CheckboxGroup>
-                    <Card p={2}>
-                      <Heading size="sm" mb={2}>
-                        業務
-                      </Heading>
-                      <Checkbox value="1">空撮</Checkbox>
-                      <Checkbox value="2">報道取材</Checkbox>
-                      <Checkbox value="3">警備</Checkbox>
-                      <Checkbox value="4">農林水産業</Checkbox>
-                      <Checkbox value="5">測量</Checkbox>
-                      <Checkbox value="6">環境調査</Checkbox>
-                      <Checkbox value="7">設備メンテナンス</Checkbox>
-                      <Checkbox value="8">インフラ点検・保守</Checkbox>
-                      <Checkbox value="9">資源管理</Checkbox>
-                      <Checkbox value="10">輸送・宅配</Checkbox>
-                      <Checkbox value="11">自然観測</Checkbox>
-                      <Checkbox value="12">事故・災害対応</Checkbox>
-                      <Heading size="sm" my={2}>
-                        業務以外
-                      </Heading>
-                      <Checkbox value="13">趣味</Checkbox>
-                      <Checkbox value="14">研究開発</Checkbox>
-                      <Checkbox value="15">
-                        その他 (飛行概要に記載してください)
-                      </Checkbox>
-                    </Card>
-                  </CheckboxGroup>
+                  <FlightPurpose
+                    values={values}
+                    setFieldValue={setFieldValue}
+                  />
                 </FormControl>
-
                 <FormControl my={2}>
                   <Flex>
                     <FormLabel htmlFor="specificFlight">
@@ -248,42 +288,107 @@ export const CreateFlightLogTemplate = () => {
                     {specificFlight ? "該当" : "該当しない"}
                   </Flex>
                   {specificFlight ? (
-                    <CheckboxGroup>
+                    <CheckboxGroup
+                      value={values.specificFlightTypes}
+                      onChange={(value) =>
+                        setFieldValue("specificFlightTypes", value)
+                      }
+                    >
                       <Card p={2}>
-                        <Checkbox value="1">夜間飛行</Checkbox>
-                        <Checkbox value="2">目視外飛行</Checkbox>
-                        <Checkbox value="3">人・家屋等から30m未満</Checkbox>
-                        <Checkbox value="4">催し場所上空</Checkbox>
-                        <Checkbox value="5">危険物・薬品輸送</Checkbox>
-                        <Checkbox value="6">物件投下</Checkbox>
+                        <Field
+                          as={Checkbox}
+                          id="nightFlight"
+                          value="nightFlight"
+                        >
+                          夜間飛行
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          id="beyondVisualLineOfSight"
+                          value="beyondVisualLineOfSight"
+                        >
+                          目視外飛行
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          id="closeToPeopleBuildings"
+                          value="closeToPeopleBuildings"
+                        >
+                          人・家屋等から30m未満
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          id="overEventSites"
+                          value="overEventSites"
+                        >
+                          催し場所上空
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          id="dangerousGoodsTransport"
+                          value="dangerousGoodsTransport"
+                        >
+                          危険物・薬品輸送
+                        </Field>
+                        <Field as={Checkbox} id="objectDrop" value="objectDrop">
+                          物件投下
+                        </Field>
                       </Card>
                     </CheckboxGroup>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </FormControl>
               </Box>
               <Box>
                 <FormControl>
-                  <FormLabel>離陸地点</FormLabel>
-                  <Input
+                  <Flex mb={2} alignItems="center">
+                    <FormLabel htmlFor="takeoff_location" mb={0}>
+                      離陸地点
+                    </FormLabel>
+                    <Button
+                      size="sm"
+                      colorScheme="blue"
+                      onClick={() => handleCurrentLocation(setFieldValue)}
+                    >
+                      現在地を取得
+                    </Button>
+                  </Flex>
+                  <Field
+                    as={Input}
                     type="text"
+                    id="takeoff_location"
+                    placeholder="離陸地点を入力"
+                    value={values.takeoff_location}
                     name="takeoff_location"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.takeoff_location}
                   />
                 </FormControl>
               </Box>
               <Box>
                 <FormControl>
-                  <FormLabel>着陸地点</FormLabel>
-                  <Input
+                  <Flex my={2} alignItems="center">
+                    <FormLabel mb={0}>着陸地点</FormLabel>
+                    <Button
+                      size="sm"
+                      colorScheme="blue"
+                      onClick={() =>
+                        setFieldValue(
+                          "landing_location",
+                          values.takeoff_location
+                        )
+                      }
+                    >
+                      離陸地点の値をコピー
+                    </Button>
+                  </Flex>
+                  <Field
+                    as={Input}
                     type="text"
+                    placeholder="着陸地点を入力"
+                    value={values.landing_location}
                     name="landing_location"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.landing_location}
                   />
                 </FormControl>
               </Box>
@@ -337,7 +442,9 @@ export const CreateFlightLogTemplate = () => {
               <Box>
                 <FormControl>
                   <Flex my={2}>
-                    <FormLabel>故障の有無</FormLabel>
+                    <FormLabel htmlFor="presence_of_malfunction">
+                      故障の有無
+                    </FormLabel>
                     <Switch
                       id="presence_of_malfunction"
                       name="presence_of_malfunction"
@@ -347,7 +454,9 @@ export const CreateFlightLogTemplate = () => {
                   </Flex>
                   {values.presence_of_malfunction == "on" ? (
                     <FormControl>
-                      <FormLabel>故障内容</FormLabel>
+                      <FormLabel htmlFor="malfunction_content">
+                        故障内容
+                      </FormLabel>
                       <Input
                         type="textarea"
                         name="malfunction_content"
@@ -356,12 +465,10 @@ export const CreateFlightLogTemplate = () => {
                         value={values.malfunction_content}
                       />
                     </FormControl>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </FormControl>
               </Box>
-              <SubmitButton />
+              <SubmitButton buttonName="飛行記録作成" />
             </Form>
           );
         }}
