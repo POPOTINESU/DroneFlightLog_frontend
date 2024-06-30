@@ -11,6 +11,7 @@ export const fetchGroupList = async () => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/groups`,
       { withCredentials: true }
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
