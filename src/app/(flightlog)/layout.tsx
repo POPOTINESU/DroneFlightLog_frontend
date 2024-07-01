@@ -1,6 +1,8 @@
+"use client";
 import { Grid, GridItem } from "@chakra-ui/react";
 import Providers from "../providers";
 import { Header } from "../features/header/Header";
+import { RecoilRoot } from "recoil";
 
 export default function FlightLogLayout({
   children,
@@ -18,7 +20,9 @@ export default function FlightLogLayout({
         fontWeight="bold"
       >
         <GridItem bg="black" color="white" area={"header"} height="8vh">
-          <Header />
+          <RecoilRoot>
+            <Header />
+          </RecoilRoot>
         </GridItem>
         <GridItem bg="gray.100" area={"main"} height="92vh">
           {children}

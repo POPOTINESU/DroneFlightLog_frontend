@@ -1,5 +1,5 @@
 "use client";
-import { fetchGroupList } from "@/app/features/flightlog/api/user/FetchGroupList";
+import { fetchGroupList } from "@/app/features/flightlog/api/group/FetchGroupList";
 import { IoIosMore } from "react-icons/io";
 import {
   Card,

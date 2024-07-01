@@ -17,7 +17,7 @@ import { useRecoilState } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
 import { useRouter } from "next/navigation";
 import { PrevStepButton } from "../atoms/StepButton/PrevStepButton";
-import { SubmitButton } from "../atoms/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../../../../shared/components/atoms/SubmitButton/SubmitButton";
 
 export const Step2 = () => {
   const router = useRouter();
@@ -182,7 +182,7 @@ export const Step2 = () => {
               </FieldArray>
               <Flex gap={2}>
                 <PrevStepButton handlePrevStep={handlePrevStep} />
-                <SubmitButton />
+                <SubmitButton buttonName="グループ作成" />
               </Flex>
             </Form>
           </Box>

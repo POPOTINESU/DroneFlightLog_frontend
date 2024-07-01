@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   Card,
@@ -16,6 +17,7 @@ import {
 import React from "react";
 import { Input } from "@chakra-ui/react";
 import { IoSearch } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 const data = {
   flightDate: "2021/09/01",
@@ -31,13 +33,19 @@ const data = {
 };
 
 export const FlightLogTable = () => {
+
+  const router = useRouter();
+
+  const handleRedirectCreateFlightLog= () => {
+    router.push(`/create/flightlog`);
+  };
   return (
     <Grid templateColumns="repeat(26, 1fr)">
       <GridItem colSpan={16} padding={3} height="100%">
         <HStack>
           <Heading size="lg">飛行記録</Heading>
           <Spacer />
-          <Button colorScheme="blue" boxShadow="base">
+          <Button colorScheme="blue" boxShadow="base" onClick={handleRedirectCreateFlightLog}>
             新規登録
           </Button>
         </HStack>
