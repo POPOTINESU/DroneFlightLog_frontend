@@ -31,16 +31,18 @@ import { fetchGroupDetail } from "../../../group/api/fetchGroupDetail";
 
 import { FlightPurpose } from "../organisms/FlightPurpose";
 import { currentLocation } from "../../api/currentLocation";
+import { createFlightLog } from "../../api/createFligthLog";
+import { useRouter } from "next/navigation";
 
 /**
  * 新規飛行記録作成
  *
  * flight_date: 飛行日
  * pilotName: 操縦者名
- * JU_number: 機体登録番号
+ * JUNumber: 機体登録番号
  * flight_summary: 飛行概要
- * takeoff_location: 離陸地点
- * landing_location: 着陸地点
+ * takeoffLocation: 離陸地点
+ * LandingLocation: 着陸地点
  * takeOffTime: 離陸時刻
  * LandingTime: 着陸時刻
  * TotalTime: 飛行時間
@@ -71,6 +73,8 @@ type Location = {
 };
 
 export const CreateFlightLogTemplate = () => {
+  const router = useRouter();
+
   const [specificFlight, setSpecificFlight] = useState(false);
   const [selectedGroup, setSelectedGroup] = useRecoilState(SelectedGroupState);
   const [groupDetail, setGroupDetail] = useState<GroupDetail | null>(null);
@@ -95,8 +99,8 @@ export const CreateFlightLogTemplate = () => {
             // 都道府県以降の住所を取得する
             const region = address[1];
             setPrefecture(region);
-            setFieldValue("takeoff_location", region);
-            setFieldValue("landing_location", region);
+            setFieldValue("takeoffLocation", region);
+            setFieldValue("LandingLocation", region);
           } catch (error) {
             setError("Failed to fetch address information.");
           }
@@ -153,10 +157,10 @@ export const CreateFlightLogTemplate = () => {
         initialValues={{
           flightDate: "",
           pilotName: "",
-          JU_number: "",
+          JUNumber: "",
           flightSummary: "",
-          takeoff_location: "",
-          landing_location: "",
+          takeoffLocation: "",
+          LandingLocation: "",
           takeOffTime: "",
           landingTime: "",
           totalTime: "",
@@ -165,8 +169,13 @@ export const CreateFlightLogTemplate = () => {
           flightPurpose: [],
           specificFlightTypes: [],
         }}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          const response = await createFlightLog({ values });
+          if (response === 201) {
+            router.push("/");
+          } else {
+            alert("飛行記録の作成に失敗しました");
+          }
         }}
       >
         {({
@@ -220,9 +229,11 @@ export const CreateFlightLogTemplate = () => {
                     value={values.pilotName}
                   >
                     <option>操縦者を選択してください</option>
-                    {groupDetail && groupDetail.users.length > 0 ? (
+                    {groupDetail &&
+                    groupDetail.users &&
+                    groupDetail.users.length > 0 ? (
                       groupDetail.users.map((user) => (
-                        <option key={user.name} value={user.name}>
+                        <option key={user.email} value={user.email}>
                           {user.name}
                         </option>
                       ))
@@ -237,16 +248,18 @@ export const CreateFlightLogTemplate = () => {
                 <FormControl>
                   <FormLabel mb={0}>機体登録番号</FormLabel>
                   <Select
-                    name="JU_number"
+                    name="JUNumber"
                     onChange={(e) => {
                       handleChange(e);
-                      setFieldValue("JU_number", e.target.value);
+                      setFieldValue("JUNumber", e.target.value);
                     }}
                     onBlur={handleBlur}
-                    value={values.JU_number}
+                    value={values.JUNumber}
                   >
                     <option>機体を選択してください</option>
-                    {groupDetail && groupDetail.drones.length > 0 ? (
+                    {groupDetail &&
+                    groupDetail.drones &&
+                    groupDetail.drones.length > 0 ? (
                       groupDetail.drones.map((drone) => (
                         <option key={drone.id} value={drone.id}>
                           {drone.drone_number}
@@ -256,7 +269,7 @@ export const CreateFlightLogTemplate = () => {
                       <option>機体が登録されていません</option>
                     )}
                   </Select>
-                  <FormErrorMessage>{errors.JU_number}</FormErrorMessage>
+                  <FormErrorMessage>{errors.JUNumber}</FormErrorMessage>
                 </FormControl>
               </Box>
               <Box>
@@ -341,7 +354,7 @@ export const CreateFlightLogTemplate = () => {
               <Box>
                 <FormControl>
                   <Flex mb={2} alignItems="center">
-                    <FormLabel htmlFor="takeoff_location" mb={0}>
+                    <FormLabel htmlFor="takeoffLocation" mb={0}>
                       離陸地点
                     </FormLabel>
                     <Button
@@ -355,10 +368,10 @@ export const CreateFlightLogTemplate = () => {
                   <Field
                     as={Input}
                     type="text"
-                    id="takeoff_location"
+                    id="takeoffLocation"
                     placeholder="離陸地点を入力"
-                    value={values.takeoff_location}
-                    name="takeoff_location"
+                    value={values.takeoffLocation}
+                    name="takeoffLocation"
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
@@ -372,10 +385,7 @@ export const CreateFlightLogTemplate = () => {
                       size="sm"
                       colorScheme="blue"
                       onClick={() =>
-                        setFieldValue(
-                          "landing_location",
-                          values.takeoff_location
-                        )
+                        setFieldValue("LandingLocation", values.takeoffLocation)
                       }
                     >
                       離陸地点の値をコピー
@@ -385,8 +395,8 @@ export const CreateFlightLogTemplate = () => {
                     as={Input}
                     type="text"
                     placeholder="着陸地点を入力"
-                    value={values.landing_location}
-                    name="landing_location"
+                    value={values.LandingLocation}
+                    name="LandingLocation"
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
