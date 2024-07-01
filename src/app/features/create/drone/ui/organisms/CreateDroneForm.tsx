@@ -219,7 +219,7 @@ export const CreateDroneForm = () => {
                 )}
               </FieldArray>
               <Flex gap={2}>
-                <SubmitButton />
+                <SubmitButton buttonName="機体作成"/>
               </Flex>
             </Form>
           </Box>
