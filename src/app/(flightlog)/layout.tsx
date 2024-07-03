@@ -24,7 +24,7 @@ export default function FlightLogLayout({
             <Header />
           </RecoilRoot>
         </GridItem>
-        <GridItem bg="gray.100" area={"main"} height="92vh">
+        <GridItem bg="gray.100" area={"main"} height="92vh" >
           {children}
         </GridItem>
       </Grid>

@@ -1,9 +1,11 @@
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 
-type CreateFlightLogProps = {
+type fetchFlightLogUpdateProps = {
+  id: string;
   values: {
     flightDate: string;
     pilotName: string;
+    groupID: string;
     JUNumber: string;
     flightSummary: string;
     takeoffLocation: string;
@@ -18,27 +20,17 @@ type CreateFlightLogProps = {
   };
 };
 
-export const createFlightLog = async (props:CreateFlightLogProps) => {
-
-  const { values } = props;
-  const selectedGroup = sessionStorage.getItem("selectedGroup");
-  if (!selectedGroup) {
-    console.error("Selected group data is not found in sessionStorage");
-    return;
-  }
-
-  const groupData = JSON.parse(selectedGroup);
-
-  // selectedGroupの中のidを取得
-  const group_id = groupData.selectedGroup.id;
-  console.log("group_id: ", group_id);
+export const fetchFlightLogUpdate = async (
+  props: fetchFlightLogUpdateProps
+) => {
+  const { id, values } = props;
 
   const data = {
     flight_log: {
       flight_date: values.flightDate,
       pilot_name: values.pilotName,
-      ju_number: values.JUNumber,
-      group_id: group_id,
+      group_id: values.groupID,
+      JUNumber: values.JUNumber,
       flight_summary: values.flightSummary,
       takeoff_location: values.takeoffLocation,
       landing_location: values.LandingLocation,
@@ -50,10 +42,9 @@ export const createFlightLog = async (props:CreateFlightLogProps) => {
       specific_flight_types: values.specificFlightTypes,
     },
   };
-
   try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flight_logs`,
+    const response = await axios.patch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flight_logs/${id}`,
       data,
       {
         withCredentials: true,
@@ -61,8 +52,11 @@ export const createFlightLog = async (props:CreateFlightLogProps) => {
     );
     return response.status;
   } catch (error) {
-    if (isAxiosError(error)) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error fetching flight log:", error.message);
       return error.response?.status;
+    } else {
+      console.error("Unexpected error:", error);
     }
   }
-}
+};
