@@ -4,7 +4,7 @@ import { Form } from "formik";
 import { SubmitButton } from "@/app/shared/ui/atoms/SubmitButton/SubmitButton";
 import { LastNameField } from "../organisms/LastNameField/LastNameField";
 import { FirstNameField } from "../organisms/FirstNameField/FirstNameField";
-import { EmailField } from "../organisms/EmailField/EmailField";
+import { EmailField } from "../../../../shared/ui/forms/EmailForm/emailFormInput/EmailField/EmailField";
 import { PasswordField } from "../organisms/PasswordField/PasswordField";
 import { signupFormType } from "./type/signupFormType";
 

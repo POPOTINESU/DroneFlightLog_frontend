@@ -1,4 +1,4 @@
-import { EmailFormInput } from "@/app/shared/ui/forms/emailFormInput/EmailFormInput";
+import { EmailFormInput } from "@/app/shared/ui/forms/EmailForm/emailFormInput/EmailFormInput";
 import { emailValidate } from "@/app/shared/validation/emailValidate";
 import { Box, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { emailFieldType } from "./type/emailFieldType";

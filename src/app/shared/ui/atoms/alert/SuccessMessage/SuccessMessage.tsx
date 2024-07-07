@@ -5,12 +5,10 @@ import {
   AlertTitle,
   Slide,
 } from "@chakra-ui/react";
+import { successMessageType } from "./successMessageType";
 
-type SuccessMessageType = {
-  successMessage: string;
-};
 
-export const SuccessMessage = (props: SuccessMessageType) => {
+export const SuccessMessage = (props: successMessageType) => {
   const { successMessage } = props;
 
   return (

@@ -14,18 +14,16 @@ import {
   CardBody,
   CardHeader,
   IconButton,
-  Icon,
   Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Input } from "@chakra-ui/react";
 import { IoSearch } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { fetchFlightLogList } from "../../api/fetchFlightLogList";
-import { MdModeEdit } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
-import { recoilPersist } from "recoil-persist";
+import { MdModeEdit, MdDelete } from "react-icons/md";
 import { deleteFlightLog } from "@/app/features/edit/flightlog/api/deleteFrightLog";
+import { SuccessMessage } from "@/app/shared/ui/atoms/alert/SuccessMessage/SuccessMessage";
 
 type Drone = {
   id: string;
@@ -53,7 +51,23 @@ type FlightLogDetails = {
 
 export const FlightLogTable = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [flightLogs, setFlightLogs] = useState<FlightLogDetails[]>([]);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      setSuccessMessage(message);
+      const timer = setTimeout(() => {
+        setSuccessMessage("");
+        // クエリパラメータを削除するためにURLを手動で置換
+        const cleanUrl = window.location.pathname;
+        router.replace(cleanUrl);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, router]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm("本当に削除しますか？")) {
@@ -72,7 +86,6 @@ export const FlightLogTable = () => {
       try {
         const response = await fetchFlightLogList();
         setFlightLogs(response);
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -107,6 +120,7 @@ export const FlightLogTable = () => {
 
   return (
     <Box mx={8}>
+      <SuccessMessage successMessage={successMessage} />
       <Grid templateColumns="repeat(26, 1fr)">
         <GridItem colSpan={16} padding={3} height="100%">
           <HStack>

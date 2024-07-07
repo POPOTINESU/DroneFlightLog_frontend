@@ -5,11 +5,6 @@ import {
   CardBody,
   Center,
   VStack,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Slide,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { signup } from "../../api/signup";
@@ -17,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SignUpHeader } from "../atom/SignUpHeader";
 import { SignupForm } from "../organisms/SignupForm";
-import { SuccessMessage } from "@/app/shared/ui/atoms/alert/SuccessMessage";
+import { SuccessMessage } from "@/app/shared/ui/atoms/alert/SuccessMessage/SuccessMessage";
 
 export const SignupTemplate = () => {
   const router = useRouter();
@@ -57,7 +52,7 @@ export const SignupTemplate = () => {
                 onSubmit={async (values) => {
                   const response = await signup(values);
                   if (response === 200) {
-                    setSuccessMessage("新規登録成功！");
+                    setSuccessMessage("新規登録成功しました。");
                   } else {
                     alert("新規登録失敗");
                   }

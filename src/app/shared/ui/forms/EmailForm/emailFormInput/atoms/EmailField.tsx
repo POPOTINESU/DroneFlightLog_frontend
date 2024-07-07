@@ -1,8 +1,7 @@
 import { Input } from "@chakra-ui/react";
 import { Field } from "formik";
 import React from "react";
-import { FormInputType } from "../../FormInputType";
-
+import { FormInputType } from "../../../FormInputType";
 
 export const EmailField = (props: FormInputType) => {
   const { onChange, value, onBlur, validate } = props;
