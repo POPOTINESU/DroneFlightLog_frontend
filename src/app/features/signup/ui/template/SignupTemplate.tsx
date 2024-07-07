@@ -4,23 +4,34 @@ import {
   Card,
   CardBody,
   Center,
-  Flex,
   VStack,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Slide,
 } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { Formik } from "formik";
 import { signup } from "../../api/signup";
 import { useRouter } from "next/navigation";
-import { SubmitButton } from "@/app/shared/ui/atoms/SubmitButton/SubmitButton";
+import { useState, useEffect } from "react";
 import { SignUpHeader } from "../atom/SignUpHeader";
-import { LastNameField } from "../organisms/LastNameField/LastNameField";
-import { FirstNameField } from "../organisms/FirstNameField/FirstNameField";
-import { EmailField } from "../organisms/EmailField/EmailField";
-import { PasswordField } from "../organisms/PasswordField/PasswordField";
 import { SignupForm } from "../organisms/SignupForm";
-
+import { SuccessMessage } from "@/app/shared/ui/atoms/alert/SuccessMessage";
 
 export const SignupTemplate = () => {
   const router = useRouter();
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage("");
+        router.push("/");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage, router]);
 
   return (
     <Box
@@ -34,6 +45,7 @@ export const SignupTemplate = () => {
         <Center>
           <VStack>
             <SignUpHeader />
+            <SuccessMessage successMessage={successMessage} />
             <CardBody>
               <Formik
                 initialValues={{
@@ -43,10 +55,9 @@ export const SignupTemplate = () => {
                   password: "",
                 }}
                 onSubmit={async (values) => {
-                  const isSignup = await signup(values);
-                  if (isSignup === 200) {
-                    // 新規登録に成功したらログインページに遷移
-                    router.push("/");
+                  const response = await signup(values);
+                  if (response === 200) {
+                    setSuccessMessage("新規登録成功！");
                   } else {
                     alert("新規登録失敗");
                   }
