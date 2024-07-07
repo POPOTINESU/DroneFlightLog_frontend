@@ -17,7 +17,7 @@ import { useRecoilState } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
 import { useRouter } from "next/navigation";
 import { PrevStepButton } from "../atoms/StepButton/PrevStepButton";
-import { SubmitButton } from "../../../../../shared/components/atoms/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../../../../shared/ui/atoms/SubmitButton/SubmitButton";
 
 export const Step2 = () => {
   const router = useRouter();

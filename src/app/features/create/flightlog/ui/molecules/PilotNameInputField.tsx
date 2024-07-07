@@ -1,7 +1,7 @@
-import { FormInputType } from '@/app/shared/components/forms/FormInputType'
-import { FormLabel, Input } from '@chakra-ui/react'
-import { Field } from 'formik'
-import React from 'react'
+import { FormInputType } from "@/app/shared/ui/forms/FormInputType";
+import { FormLabel, Input } from "@chakra-ui/react";
+import { Field } from "formik";
+import React from "react";
 
 export const PilotNameInputField = (props: FormInputType) => {
   return (
@@ -21,5 +21,5 @@ export const PilotNameInputField = (props: FormInputType) => {
         validate={props.validate}
       />
     </FormLabel>
-  )
-}
+  );
+};

@@ -18,7 +18,7 @@ import {
 import { Field, Form, Formik } from "formik";
 import React, { useEffect, useCallback, useRef, useState } from "react";
 import { FlightDateInputField } from "../molecules/FlightDateInputField";
-import { SubmitButton } from "../../../../../shared/components/atoms/SubmitButton/SubmitButton";
+import { SubmitButton } from "../../../../../shared/ui/atoms/SubmitButton/SubmitButton";
 import { TakeOffTimeInputField } from "../molecules/TakeOffTimeInputField";
 import { LandingTimeInputField } from "../molecules/LandingTimeInputField";
 import { TotalTimeInputField } from "../molecules/TotalTimeInputField";

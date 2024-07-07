@@ -1,4 +1,4 @@
-import { FormInputType } from "@/app/shared/components/forms/FormInputType";
+import { FormInputType } from "@/app/shared/ui/forms/FormInputType";
 import { FormLabel, Input } from "@chakra-ui/react";
 import { Field, Form } from "formik";
 

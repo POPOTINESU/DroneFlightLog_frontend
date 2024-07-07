@@ -12,8 +12,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { EmailFormInput } from "../../../../shared/components/forms/emailFormInput/EmailFormInput";
-import { PasswordFormInput } from "../../../../shared/components/forms/passwordFormInput/PasswordFormInput";
+import { EmailFormInput } from "../../../../shared/ui/forms/emailFormInput/EmailFormInput";
+import { PasswordFormInput } from "../../../../shared/ui/forms/passwordFormInput/PasswordFormInput";
 import { LoginButton } from "../atoms/loginButton/LoginButton";
 import { Formik, Form } from "formik";
 import { login } from "../../api/login";

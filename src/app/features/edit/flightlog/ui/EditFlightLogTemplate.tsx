@@ -25,7 +25,7 @@ import { LandingTimeInputField } from "@/app/features/create/flightlog/ui/molecu
 import { TotalTimeInputField } from "@/app/features/create/flightlog/ui/molecules/TotalTimeInputField";
 import { handleCalcTime } from "@/app/features/create/flightlog/utility/handleCalcTime";
 import { FlightPurpose } from "@/app/features/create/flightlog/ui/organisms/FlightPurpose";
-import { SubmitButton } from "@/app/shared/components/atoms/SubmitButton/SubmitButton";
+import { SubmitButton } from "@/app/shared/ui/atoms/SubmitButton/SubmitButton";
 import { format } from "path";
 import { fetchFlightLogUpdate } from "../api/fetchFlightLogUpdate";
 
