@@ -27,7 +27,7 @@ import { FlightSummaryInputField } from "../molecules/FlightSummaryInputField";
 import { useRecoilState } from "recoil";
 import { SelectedGroupState } from "@/app/features/header/state/SelectedGroupState";
 import { handleCalcTime } from "../../utility/handleCalcTime";
-import { fetchGroupDetail } from "../../../group/api/fetchGroupDetail";
+import { fetchGroupDetail } from "../../../../show/api/fetchGroupDetail";
 
 import { FlightPurpose } from "../organisms/FlightPurpose";
 import { currentLocation } from "../../api/currentLocation";
