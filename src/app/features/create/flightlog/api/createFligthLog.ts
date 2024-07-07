@@ -37,7 +37,7 @@ export const createFlightLog = async (props:CreateFlightLogProps) => {
     flight_log: {
       flight_date: values.flightDate,
       pilot_name: values.pilotName,
-      ju_number: values.JUNumber,
+      JUNumber: values.JUNumber,
       group_id: group_id,
       flight_summary: values.flightSummary,
       takeoff_location: values.takeoffLocation,
