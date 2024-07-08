@@ -2,23 +2,18 @@ import {
   Card,
   Checkbox,
   CheckboxGroup,
+  FormControl,
   FormLabel,
   Heading,
 } from "@chakra-ui/react";
 import { Field } from "formik";
 import React from "react";
-
-type FlightPurposeProps = {
-  values: {
-    flightPurpose: string[];
-  };
-  setFieldValue: (field: string, value: any) => void;
-};
+import { FlightPurposeProps } from "./types/flightPurposeTypes";
 
 export const FlightPurpose = (props: FlightPurposeProps) => {
   const { values, setFieldValue } = props;
   return (
-    <>
+    <FormControl>
       <FormLabel mb={0}>飛行目的</FormLabel>
       <CheckboxGroup
         value={values.flightPurpose}
@@ -98,6 +93,6 @@ export const FlightPurpose = (props: FlightPurposeProps) => {
           </Field>
         </Card>
       </CheckboxGroup>
-    </>
+    </FormControl>
   );
 };
