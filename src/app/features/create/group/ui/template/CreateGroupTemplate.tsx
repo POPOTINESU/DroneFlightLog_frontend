@@ -10,8 +10,8 @@ import {
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
-import { Step1 } from "../organisms/Step1";
-import { Step2 } from "../organisms/Step2";
+import { Step1 } from "../organisms/Step1/Step1";
+import { Step2 } from "../organisms/Step2/Step2";
 
 /**
  * 新規でグループ作成する際のフォーム
@@ -42,9 +42,7 @@ export const CreateGroupTemplate = () => {
       <CardHeader>
         <Heading size="lg">新規グループ作成</Heading>
       </CardHeader>
-      <CardBody width="100%">
-        {step === 1 ? <Step1 /> : <Step2 />}
-      </CardBody>
+      <CardBody width="100%">{step === 1 ? <Step1 /> : <Step2 />}</CardBody>
     </>
   );
 };

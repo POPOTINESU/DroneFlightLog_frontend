@@ -1,7 +1,6 @@
 "use client";
 import {
   Box,
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -9,10 +8,13 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { GroupNameInputField } from "../molecules/GroupNameInputField";
-import { FormStepState } from "../../state/FormStepState";
+import { GroupNameInputField } from "../../molecules/GroupNameInputField";
+import { FormStepState } from "../../../state/FormStepState";
 import { useRecoilState } from "recoil";
-import { NextStepButton } from "../atoms/StepButton/NextStepButton";
+import { NextStepButton } from "../../atoms/StepButton/NextStepButton";
+import { MulchEmailField } from "../MulchEmailField/MulchEmailField";
+import { validateEmails } from "./validation/MaltipulEmailValidate";
+import { GroupNameValidate } from "./validation/GroupNameValidate";
 
 /**
  * グループ名と、招待相手のメールアドレスを入力するフォーム
@@ -35,29 +37,6 @@ export const Step1 = () => {
       emails: emails ? JSON.parse(emails).join("\n") : "",
     });
   }, []);
-
-  const GroupNameValidate = (value: string) => {
-    let error;
-    if (!value) {
-      error = "グループ名を入力してください";
-    }
-    return error;
-  };
-
-  const validateEmails = (value: string) => {
-    let error;
-    if (!value) {
-      error = "メールアドレスを入力してください";
-    } else {
-      const emailArray = value.split("\n").map((email) => email.trim());
-      emailArray.forEach((email, index) => {
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          error = `メールアドレスの形式が正しくありません (${index + 1})`;
-        }
-      });
-    }
-    return error;
-  };
 
   return (
     <Formik
@@ -99,32 +78,22 @@ export const Step1 = () => {
       }) => (
         <Form>
           <Box mb={5}>
-            <FormControl isInvalid={!!errors.groupName && touched.groupName}>
-              <GroupNameInputField
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.groupName}
-                validate={GroupNameValidate}
-              />
-              <FormErrorMessage>{errors.groupName}</FormErrorMessage>
-            </FormControl>
+            <GroupNameInputField
+              value={values.groupName}
+              errors={errors}
+              touched={touched}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
           </Box>
           <Box my={2} maxHeight="160px">
-            <FormControl isInvalid={!!errors.emails && touched.emails}>
-              <FormLabel htmlFor="emails" marginBottom="0">
-                招待するユーザーのメールアドレス
-              </FormLabel>
-              <Textarea
-                name="emails"
-                value={values.emails}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="複数入力の場合は、改行で入力してください"
-                rows={5}
-                resize="none"
-              />
-              <FormErrorMessage>{errors.emails}</FormErrorMessage>
-            </FormControl>
+            <MulchEmailField
+              values={values}
+              errors={errors}
+              touched={touched}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+            />
           </Box>
           <NextStepButton
             isSubmitting={isSubmitting}
