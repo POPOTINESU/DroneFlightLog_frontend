@@ -1,61 +1,33 @@
 "use client";
 
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  Heading,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Center, Divider, Flex, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
-import { EmailFormInput } from "../../../../shared/components/forms/emailFormInput/EmailFormInput";
-import { PasswordFormInput } from "../../../../shared/components/forms/passwordFormInput/PasswordFormInput";
 import { LoginButton } from "../atoms/loginButton/LoginButton";
 import { Formik, Form } from "formik";
 import { login } from "../../api/login";
 import { useRouter } from "next/navigation";
+import { PasswordField } from "./PasswordField/PasswordField";
+import { EmailField } from "@/app/shared/ui/forms/EmailForm/emailFormInput/EmailField/EmailField";
+import { LoginHeader } from "./PasswordField/LoginHeader";
 
 export const LoginForm = () => {
   const router = useRouter();
-  // emailのバリデーション
-  const emailValidate = (value: string) => {
-    let error;
-    if (!value) {
-      error = "メールアドレスを入力してください";
-    } else if (!value.includes("@")) {
-      error = "メールアドレスの形式が正しくありません";
-    }
-    return error;
-  };
-  // passwordのバリデーション
-  const passwordValidate = (value: string) => {
-    let error;
-    if (!value) {
-      error = "パスワードを入力してください";
-    }
-    return error;
-  };
 
   return (
     <VStack>
       <Center height="100vh">
         <Box width="80%" padding="4">
-          <Heading size="2xl" textAlign="center" marginBottom="20">
-            ログイン
-          </Heading>
+          <LoginHeader />
+
           <Formik
             initialValues={{ email: "", password: "" }}
             onSubmit={async (values) => {
               const isLogin = await login(values);
               if (isLogin === 200) {
-                // ログインに成功したらトップページに遷移
-                router.push("/");
+                // ログインに成功したらクエリパラメータでメッセージを渡してトップページに遷移
+                router.push("/?message=ログインに成功しました。");
               } else {
-                alert("ログイン失敗");
+                alert("メールアドレス、またはパスワードが間違っています。");
               }
             }}
           >
@@ -69,28 +41,22 @@ export const LoginForm = () => {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Box marginBottom="8">
-                  <FormControl isInvalid={!!errors.email && touched.email}>
-                    <EmailFormInput
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.email}
-                      validate={emailValidate}
-                    />
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                  </FormControl>
+                  <EmailField
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    values={values}
+                    errors={errors}
+                    touched={touched}
+                  />
                 </Box>
                 <Box>
-                  <FormControl
-                    isInvalid={!!errors.password && touched.password}
-                  >
-                    <PasswordFormInput
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.password}
-                      validate={passwordValidate}
-                    />
-                    <FormErrorMessage>{errors.password}</FormErrorMessage>
-                  </FormControl>
+                  <PasswordField
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    values={values}
+                    errors={errors}
+                    touched={touched}
+                  />
                 </Box>
                 <Flex justifyContent="flex-end" marginTop="8">
                   <Link href="">

@@ -7,11 +7,12 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { FormStepState } from "../../state/FormStepState";
-import { Step1 } from "../organisms/Step1";
-import { Step2 } from "../organisms/Step2";
+import { Step1 } from "../organisms/Step1/Step1";
+import { Step2 } from "../organisms/Step2/Step2";
+import { useRouter, useSearchParams } from "next/navigation";
 
 /**
  * 新規でグループ作成する際のフォーム
@@ -36,15 +37,31 @@ export const CreateGroupTemplate = () => {
       sessionStorage.removeItem("purchaseDate");
     };
   }, []);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      setSuccessMessage(message);
+      const timer = setTimeout(() => {
+        setSuccessMessage("");
+        // クエリパラメータを削除するためにURLを手動で置換
+        const cleanUrl = window.location.pathname;
+        router.replace(cleanUrl);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, router]);
+
 
   return (
     <>
       <CardHeader>
         <Heading size="lg">新規グループ作成</Heading>
       </CardHeader>
-      <CardBody width="100%">
-        {step === 1 ? <Step1 /> : <Step2 />}
-      </CardBody>
+      <CardBody width="100%">{step === 1 ? <Step1 /> : <Step2 />}</CardBody>
     </>
   );
 };

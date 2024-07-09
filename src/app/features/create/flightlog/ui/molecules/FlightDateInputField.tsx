@@ -2,7 +2,7 @@ import React from "react";
 import { Flex, Input, VStack } from "@chakra-ui/react";
 import { FormLabel } from "@chakra-ui/react";
 import { Field } from "formik";
-import { FormInputType } from "@/app/shared/components/forms/FormInputType";
+import { FormInputType } from "@/app/shared/ui/forms/FormInputType";
 
 export const FlightDateInputField = (props: FormInputType) => {
   return (
