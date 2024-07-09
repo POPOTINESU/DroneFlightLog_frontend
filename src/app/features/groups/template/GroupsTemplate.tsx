@@ -1,5 +1,5 @@
 "use client";
-import { fetchGroupList } from "@/app/features/flightlog/api/group/FetchGroupList";
+
 import {
   Card,
   CardHeader,
@@ -13,16 +13,24 @@ import {
   Th,
   Thead,
   Tr,
+  Box,
+  Button,
+  HStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GroupTemplateSkeleton } from "../skeleton/GroupTemplateSkeleton";
-import { GroupTable } from "../organisms/GroupTable";
-import { Group } from "../organisms/types/GroupTableTypes";
+import { GroupTable } from "../organisms/groupTable/GroupTable";
+import { Group } from "../organisms/groupTable/types/GroupTableTypes";
+import { Pagination } from "../organisms/pagination/Pagination";
+import { fetchGroupList } from "../../flightlog/api/group/fetchGroupList";
+
 
 export const GroupsTemplate = () => {
-  const [group, setGroup] = useState<Group[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const groupsPerPage = 10;
   const router = useRouter();
 
   const handleRedirectDetailGroup = (id: string) => {
@@ -30,14 +38,32 @@ export const GroupsTemplate = () => {
   };
 
   useEffect(() => {
-    fetchGroupList().then((data) => {
-      setGroup(data);
-      setIsLoading(false);
-    });
+    fetchGroupList()
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setGroups(data);
+        } else {
+          console.error("Fetched data is not an array", data);
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching group list", error);
+        setIsLoading(false);
+      });
   }, []);
+
+  const handlePageClick = (selectedPage: number) => {
+    setCurrentPage(selectedPage);
+  };
+
+  const offset = currentPage * groupsPerPage;
+  const currentGroups = groups.slice(offset, offset + groupsPerPage);
+  const pageCount = Math.ceil(groups.length / groupsPerPage);
+
   return (
-    <>
-      <Card width="100%" height="100%">
+    <Box display="flex" flexDirection="column" minHeight="100%">
+      <Card width="100%" flex="1">
         <CardHeader>
           <Heading size="md">グループ一覧</Heading>
         </CardHeader>
@@ -47,17 +73,16 @@ export const GroupsTemplate = () => {
               <Tr>
                 <Th>グループ名</Th>
                 <Th>所属ユーザー数</Th>
-                <Th> 所持機体数</Th>
+                <Th>所持機体数</Th>
                 <Th></Th>
               </Tr>
             </Thead>
             <Tbody>
               {isLoading ? (
-                // スケルトンの表示
                 <GroupTemplateSkeleton />
-              ) : group.length > 0 ? (
+              ) : currentGroups.length > 0 ? (
                 <GroupTable
-                  group={group}
+                  group={currentGroups}
                   handleRedirectDetailGroup={handleRedirectDetailGroup}
                 />
               ) : (
@@ -72,7 +97,16 @@ export const GroupsTemplate = () => {
             </Tbody>
           </Table>
         </TableContainer>
+        {!isLoading && currentGroups.length > 0 && (
+          <Box position="absolute" bottom="3" left="50%">
+            <Pagination
+              pageCount={pageCount}
+              currentPage={currentPage}
+              handlePageClick={handlePageClick}
+            />
+          </Box>
+        )}
       </Card>
-    </>
+    </Box>
   );
 };

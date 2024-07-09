@@ -22,7 +22,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useRouter } from "next/navigation";
-import { fetchGroupList } from "../flightlog/api/group/FetchGroupList";
+import { fetchGroupList } from "../flightlog/api/group/fetchGroupList";
 import { useRecoilState } from "recoil";
 import { SelectedGroupState } from "./state/SelectedGroupState";
 import { GroupListState } from "./state/GroupListState";

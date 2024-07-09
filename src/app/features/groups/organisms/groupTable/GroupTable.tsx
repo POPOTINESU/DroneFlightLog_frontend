@@ -3,6 +3,7 @@ import React from "react";
 import { IoIosMore } from "react-icons/io";
 import { Group } from "./types/GroupTableTypes";
 
+
 type GroupTableTypes = {
   group: Group[];
   handleRedirectDetailGroup: (id: string) => void;

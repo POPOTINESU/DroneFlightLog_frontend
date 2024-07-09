@@ -7,12 +7,15 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { Field } from "formik";
-import { handleCurrentLocation } from "./utility/handleCurrentLocation";
+
 import { TakeoffLocationFieldYTypes } from "./types/takeoffLocationTypes";
 import { validateTakeoffLocation } from "./validation/validateTakeoffLocation";
+import { useCurrentLocation } from "./utility/handleCurrentLocation";
 
 export const TakeoffLocationField = (props: TakeoffLocationFieldYTypes) => {
-  const { values, setFieldValue, handleChange, handleBlur, error } = props;
+  const { values, setFieldValue, handleChange, handleBlur } = props;
+  const { error, handleCurrentLocation } = useCurrentLocation();
+
   return (
     <FormControl>
       <Flex mb={2} alignItems="center">

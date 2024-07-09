@@ -22,7 +22,7 @@ export const SignupTemplate = () => {
     if (successMessage) {
       const timer = setTimeout(() => {
         setSuccessMessage("");
-        router.push("/");
+        router.push("/create/group/");
       }, 2000);
       return () => clearTimeout(timer);
     }
