@@ -16,7 +16,7 @@ import { SubmitButton } from "../../../../../shared/ui/atoms/SubmitButton/Submit
 import { DroneNumberInputField } from "../../../group/ui/molecules/DroneNumberInputField";
 import { JUNumberInputField } from "../../../group/ui/molecules/JUNumberInputField";
 import * as Yup from "yup";
-import { fetchGroupList } from "@/app/features/flightlog/api/group/fetchGroupList";
+import { fetchGroupList } from "@/app/shared/api/fetchGroupList";
 import { useRouter } from "next/navigation";
 import { createDrone } from "../../api/createDrone";
 

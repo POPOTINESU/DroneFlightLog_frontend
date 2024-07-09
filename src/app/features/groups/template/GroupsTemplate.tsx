@@ -23,8 +23,7 @@ import { GroupTemplateSkeleton } from "../skeleton/GroupTemplateSkeleton";
 import { GroupTable } from "../organisms/groupTable/GroupTable";
 import { Group } from "../organisms/groupTable/types/GroupTableTypes";
 import { Pagination } from "../organisms/pagination/Pagination";
-import { fetchGroupList } from "../../flightlog/api/group/fetchGroupList";
-
+import { fetchGroupList } from "../../../shared/api/fetchGroupList";
 
 export const GroupsTemplate = () => {
   const [groups, setGroups] = useState<Group[]>([]);
