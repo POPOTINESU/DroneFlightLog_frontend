@@ -59,7 +59,7 @@ export const LoginForm = () => {
                   />
                 </Box>
                 <Flex justifyContent="flex-end" marginTop="8">
-                  <Link href="">
+                  <Link href="/password_reset">
                     <Text as="b" color="blue.500">
                       パスワードを忘れた場合はこちら
                     </Text>
