@@ -26,7 +26,6 @@ import { TotalTimeInputField } from "@/app/features/create/flightlog/ui/molecule
 import { handleCalcTime } from "@/app/features/create/flightlog/utility/handleCalcTime";
 import { FlightPurpose } from "@/app/features/create/flightlog/ui/organisms/FlightPurpose/FlightPurpose";
 import { SubmitButton } from "@/app/shared/ui/atoms/SubmitButton/SubmitButton";
-import { format } from "path";
 import { fetchFlightLogUpdate } from "../api/fetchFlightLogUpdate";
 
 type FlightLogDetails = {
@@ -54,6 +53,12 @@ type FlightLogDetails = {
     id: string;
     name: string;
   }[];
+  problem_field: {
+    id: number;
+    problem_description: string;
+    date_of_resolution_datetime: string;
+    corrective_action: string;
+  } | null;
 };
 
 export const EditFlightLogTemplate = () => {
@@ -61,6 +66,7 @@ export const EditFlightLogTemplate = () => {
   const params = useParams();
   const flightlog_id = params.flightlog_id as string;
   const [flightLog, setFlightLog] = useState<FlightLogDetails | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [takeoffTimeChange, setTakeoffTimeChange] = useState<string>("");
@@ -87,6 +93,7 @@ export const EditFlightLogTemplate = () => {
     const fetchFlightLogDetail = async () => {
       try {
         const data = await fetchFlightLogShow(flightlog_id);
+        console.log(data)
         setFlightLog(data);
 
         const takeoffTime = data.flight_log.takeoff_time;
@@ -144,11 +151,11 @@ export const EditFlightLogTemplate = () => {
               takeOffTime: takeoffTimeChange,
               landingTime: landingTimeChange,
               totalTime: totalTimeChange,
-              presence_of_malfunction: "",
-              malfunction_content: "",
+              problem_description: flightLog.problem_field?.problem_description || "",
+              date_of_resolution_datetime: flightLog.problem_field?.date_of_resolution_datetime || "",
+              corrective_action: flightLog.problem_field?.corrective_action || "",
               flightPurpose: flightLog.flight_log.flight_purpose || [],
-              specificFlightTypes:
-                flightLog.flight_log.specific_flight_types || [],
+              specificFlightTypes: flightLog.flight_log.specific_flight_types || [],
             }}
             onSubmit={async (values) => {
               try {
@@ -165,8 +172,9 @@ export const EditFlightLogTemplate = () => {
                     takeOffTime: values.takeOffTime,
                     landingTime: values.landingTime,
                     totalTime: values.totalTime,
-                    presence_of_malfunction: values.presence_of_malfunction,
-                    malfunction_content: values.malfunction_content,
+                    problem_description: values.problem_description,
+                    date_of_resolution_datetime: values.date_of_resolution_datetime,
+                    corrective_action: values.corrective_action,
                     flightPurpose: values.flightPurpose,
                     specificFlightTypes: values.specificFlightTypes,
                   },
@@ -203,9 +211,7 @@ export const EditFlightLogTemplate = () => {
               return (
                 <form onSubmit={handleSubmit}>
                   <Box>
-                    <FormControl
-                      isInvalid={!!errors.flightDate && touched.flightDate}
-                    >
+                    <FormControl isInvalid={!!errors.flightDate && touched.flightDate}>
                       <FlightDateInputField
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -216,9 +222,7 @@ export const EditFlightLogTemplate = () => {
                     </FormControl>
                   </Box>
                   <Box>
-                    <FormControl
-                      isInvalid={!!errors.pilotName && touched.pilotName}
-                    >
+                    <FormControl isInvalid={!!errors.pilotName && touched.pilotName}>
                       <FormLabel mb={0}>操縦者名</FormLabel>
                       <Select
                         name="pilotName"
@@ -451,56 +455,69 @@ export const EditFlightLogTemplate = () => {
                   <Box>
                     <FormControl
                       isInvalid={
-                        !!errors.presence_of_malfunction &&
-                        touched.presence_of_malfunction
+                        !!errors.problem_description &&
+                        touched.problem_description
                       }
                     >
-                      <FormLabel mb={0}>故障の有無</FormLabel>
-                      <Select
-                        name="presence_of_malfunction"
-                        onChange={(e) => {
-                          handleChange(e);
-                          setFieldValue(
-                            "presence_of_malfunction",
-                            e.target.value
-                          );
-                        }}
+                      <FormLabel mb={0}>故障内容</FormLabel>
+                      <Field
+                        as={Input}
+                        type="text"
+                        placeholder="故障内容を入力"
+                        value={values.problem_description}
+                        name="problem_description"
+                        onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.presence_of_malfunction}
-                      >
-                        <option value="">選択してください</option>
-                        <option value="あり">あり</option>
-                        <option value="なし">なし</option>
-                      </Select>
+                      />
                       <FormErrorMessage>
-                        {errors.presence_of_malfunction}
+                        {errors.problem_description}
                       </FormErrorMessage>
                     </FormControl>
                   </Box>
-                  {values.presence_of_malfunction === "あり" && (
-                    <Box>
-                      <FormControl
-                        isInvalid={
-                          !!errors.malfunction_content &&
-                          touched.malfunction_content
-                        }
-                      >
-                        <FormLabel mb={0}>故障内容</FormLabel>
-                        <Field
-                          as={Input}
-                          type="text"
-                          placeholder="故障内容を入力"
-                          value={values.malfunction_content}
-                          name="malfunction_content"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        <FormErrorMessage>
-                          {errors.malfunction_content}
-                        </FormErrorMessage>
-                      </FormControl>
-                    </Box>
-                  )}
+                  <Box>
+                    <FormControl
+                      isInvalid={
+                        !!errors.date_of_resolution_datetime &&
+                        touched.date_of_resolution_datetime
+                      }
+                    >
+                      <FormLabel mb={0}>対処日時</FormLabel>
+                      <Field
+                        as={Input}
+                        type="date"
+                        placeholder="対処日時を入力"
+                        value={values.date_of_resolution_datetime}
+                        name="date_of_resolution_datetime"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <FormErrorMessage>
+                        {errors.date_of_resolution_datetime}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <FormControl
+                      isInvalid={
+                        !!errors.corrective_action &&
+                        touched.corrective_action
+                      }
+                    >
+                      <FormLabel mb={5}>対処内容</FormLabel>
+                      <Field
+                        as={Input}
+                        type="textarea"
+                        placeholder=""
+                        value={values.corrective_action}
+                        name="corrective_action"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <FormErrorMessage>
+                        {errors.corrective_action}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Box>
                   <Box mt={4}>
                     <SubmitButton buttonName="編集内容を保存" />
                   </Box>

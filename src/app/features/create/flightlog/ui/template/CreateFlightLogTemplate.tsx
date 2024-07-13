@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React, { useEffect, useCallback, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SubmitButton } from "../../../../../shared/ui/atoms/SubmitButton/SubmitButton";
 
 import { useRecoilState } from "recoil";
@@ -70,14 +70,6 @@ export const CreateFlightLogTemplate = () => {
     fetchGroup();
   }, [selectedGroup]);
 
-  const validateFlightDate = (value: string) => {
-    let error;
-    if (!value) {
-      error = "飛行日を入力してください";
-    }
-    return error;
-  };
-
   return (
     <Box>
       <Heading size="md">新規飛行記録作成</Heading>
@@ -94,7 +86,9 @@ export const CreateFlightLogTemplate = () => {
           landingTime: "",
           totalTime: "",
           presence_of_malfunction: "",
-          malfunction_content: "",
+          problem_description: "",
+          date_of_resolution_datetime: "",
+          corrective_action: "",
           flightPurpose: [],
           specificFlightTypes: [],
         }}
@@ -233,18 +227,45 @@ export const CreateFlightLogTemplate = () => {
                     {values.presence_of_malfunction == "on" ? "有り" : "無し"}
                   </Flex>
                   {values.presence_of_malfunction == "on" ? (
+                    <>
                     <FormControl>
-                      <FormLabel htmlFor="malfunction_content">
+                      <FormLabel htmlFor="problem_description">
                         故障内容
                       </FormLabel>
                       <Input
                         type="textarea"
-                        name="malfunction_content"
+                        name="problem_description"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.malfunction_content}
+                        value={values.problem_description}
                       />
                     </FormControl>
+                    <FormControl>
+                      <FormLabel htmlFor="date_of_resolution_datetime">
+                        対処日時
+                      </FormLabel>
+                      <Input
+                        type="date"
+                        name="date_of_resolution_datetime"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.date_of_resolution_datetime}
+                      />
+                    </FormControl>
+                    <FormControl mb={5}>
+                      <FormLabel htmlFor="corrective_action">
+                        対処内容
+                      </FormLabel>
+                      <Input
+                        type="textarea"
+                        name="corrective_action"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.corrective_action}
+                      />
+                    </FormControl>
+                    </>
+
                   ) : null}
                 </FormControl>
               </Box>

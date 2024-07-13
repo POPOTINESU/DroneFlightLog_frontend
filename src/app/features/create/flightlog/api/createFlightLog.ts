@@ -12,7 +12,9 @@ type CreateFlightLogProps = {
     landingTime: string;
     totalTime: string;
     presence_of_malfunction: string;
-    malfunction_content: string;
+    problem_description: string;
+    date_of_resolution_datetime: string;
+    corrective_action: string;
     flightPurpose: string[];
     specificFlightTypes: string[];
   };
@@ -45,7 +47,9 @@ export const createFlightLog = async (props:CreateFlightLogProps) => {
       takeoff_time: values.takeOffTime,
       landing_time: values.landingTime,
       total_time: values.totalTime,
-      malfunction_content: values.malfunction_content,
+      problem_description: values.problem_description,
+      date_of_resolution_datetime: values.date_of_resolution_datetime,
+      corrective_action: values.corrective_action,
       flight_purpose: values.flightPurpose,
       specific_flight_types: values.specificFlightTypes,
     },

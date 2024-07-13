@@ -9,16 +9,12 @@ import {
   Spacer,
   Text,
   Box,
-  IconButton,
   Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchFlightLogList } from "../../../api/fetchFlightLogList";
-import { MdModeEdit, MdDelete } from "react-icons/md";
-import { deleteFlightLog } from "@/app/features/edit/flightlog/api/deleteFrightLog";
 import { SuccessMessage } from "@/app/shared/ui/atoms/alert/SuccessMessage/SuccessMessage";
-import { SearchField } from "../SearchField/SearchField";
 import Pagination from "../pagination/Pagination";
 import { EditButton } from "../../atom/editButton/EditButton";
 import { DeleteButton } from "../../atom/deleteButton/DeleteButton";
@@ -32,8 +28,10 @@ export const FlightLogTable = () => {
   const [flightLogs, setFlightLogs] = useState<FlightLogDetails[]>([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // 1ページに表示するアイテム数
-  const totalPages = Math.ceil(flightLogs.length / itemsPerPage); // 総ページ数
+  const itemsPerPage = 7; // 1ページに表示するアイテム数
+
+  // flightLogsが空またはundefinedの場合はページ数を１にする
+  const totalPages = flightLogs ? Math.ceil(flightLogs.length / itemsPerPage) : 1;
 
   useEffect(() => {
     const message = searchParams.get("message");
@@ -72,16 +70,16 @@ export const FlightLogTable = () => {
   const iconSize = "2rem";
 
   // 現在のページに表示する飛行記録を取得
-  const currentFlightLogs = flightLogs.slice(
+  const currentFlightLogs = flightLogs ? flightLogs.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
-  );
+  ) : [];
 
   return (
-    <Box mx={8}>
+    <Box mx={8} height="100%" display="flex" flexDirection="column">
       <SuccessMessage successMessage={successMessage} />
-      <Grid templateColumns="repeat(26, 1fr)">
-        <GridItem colSpan={16} padding={3} height="100%">
+      <Grid templateColumns="repeat(26, 1fr)" height="100%">
+        <GridItem colSpan={26} padding={3} height="100%">
           <HStack>
             <Heading size="lg">飛行記録</Heading>
             <Spacer />
@@ -98,7 +96,7 @@ export const FlightLogTable = () => {
               新規登録
             </Button>
           </HStack>
-          <Card mt={2} p={3}>
+          <Card mt={2} p={3} flex="1" overflowY="auto">
             {currentFlightLogs && currentFlightLogs.length > 0 ? (
               currentFlightLogs.map((data: FlightLogDetails) => (
                 <Box key={data.flight_log.id} mt={2}>
@@ -123,8 +121,7 @@ export const FlightLogTable = () => {
                       </HStack>
                     </Box>
                     <Spacer />
-                    <EditButton data={data.flight_log.id} iconSize={iconSize} />
-
+                    <EditButton data={data} iconSize={iconSize} />
                     <DeleteButton data={data} iconSize={iconSize} />
                   </Flex>
                 </Box>
@@ -134,9 +131,9 @@ export const FlightLogTable = () => {
             )}
           </Card>
         </GridItem>
-        <GridItem colSpan={10} height="100%" padding={3}>
+        {/* <GridItem colSpan={10} height="100%" padding={3}>
           <SearchField />
-        </GridItem>
+        </GridItem> */}
       </Grid>
     </Box>
   );

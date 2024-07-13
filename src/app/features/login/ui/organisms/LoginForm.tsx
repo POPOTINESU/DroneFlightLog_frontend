@@ -40,7 +40,7 @@ export const LoginForm = () => {
               handleSubmit,
             }) => (
               <Form onSubmit={handleSubmit}>
-                <Box marginBottom="8">
+                <Box>
                   <EmailField
                     handleChange={handleChange}
                     handleBlur={handleBlur}
@@ -58,8 +58,8 @@ export const LoginForm = () => {
                     touched={touched}
                   />
                 </Box>
-                <Flex justifyContent="flex-end" marginTop="8">
-                  <Link href="">
+                <Flex justifyContent="flex-end">
+                  <Link href="/password_reset">
                     <Text as="b" color="blue.500">
                       パスワードを忘れた場合はこちら
                     </Text>

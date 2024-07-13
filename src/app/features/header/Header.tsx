@@ -27,6 +27,7 @@ import { useRecoilState } from "recoil";
 import { SelectedGroupState } from "./state/SelectedGroupState";
 import { GroupListState } from "./state/GroupListState";
 import { LogoutButton } from "./ui/LogoutButton/LogoutButton";
+import { fetchUser } from "./api/fetchUser/fetchUser";
 
 export const Header = () => {
   const router = useRouter();
@@ -48,6 +49,8 @@ export const Header = () => {
     const fetchGroup = async () => {
       try {
         const response = await fetchGroupList();
+        const user = await fetchUser();
+        setUser(user.user_name); // Ensure this is a string, adjust as needed
         if (response.length > 0) {
           setSelectedGroup({ id: response[0].id, name: response[0].name });
         }
@@ -67,8 +70,6 @@ export const Header = () => {
         <Link href="/">
           <Text textAlign={"center"}>飛行記録</Text>
         </Link>
-        <Link href="">日常点検記録</Link>
-        <Link href="">点検整備記録</Link>
         <Link href="/groups">グループ一覧</Link>
       </Grid>
       <Button
@@ -95,10 +96,11 @@ export const Header = () => {
             <Spacer />
           </DrawerHeader>
           <DrawerBody>
-            <Flex ml="auto" mr="auto">
-              <Button color="white" background="black" colorScheme="black">
+            <Flex alignItems="center">
+              <Text color="white" p={4} as="b">
                 ユーザー名
-              </Button>
+              </Text>
+              <Text color="white">{user}</Text>
             </Flex>
 
             <Menu>
@@ -136,7 +138,7 @@ export const Header = () => {
                 )}
               </MenuList>
             </Menu>
-            <Box>
+            <Box mt={4}>
               <LogoutButton />
             </Box>
           </DrawerBody>

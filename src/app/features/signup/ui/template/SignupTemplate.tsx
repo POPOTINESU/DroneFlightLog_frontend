@@ -1,11 +1,5 @@
 "use client";
-import {
-  Box,
-  Card,
-  CardBody,
-  Center,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Card, CardBody, Center, VStack } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { signup } from "../../api/signup";
 import { useRouter } from "next/navigation";
@@ -40,7 +34,6 @@ export const SignupTemplate = () => {
         <Center>
           <VStack>
             <SignUpHeader />
-            <SuccessMessage successMessage={successMessage} />
             <CardBody>
               <Formik
                 initialValues={{
@@ -53,6 +46,7 @@ export const SignupTemplate = () => {
                   const response = await signup(values);
                   if (response === 200) {
                     setSuccessMessage("新規登録成功しました。");
+                    router.push(`/?message=${successMessage}`);
                   } else {
                     alert("新規登録失敗");
                   }

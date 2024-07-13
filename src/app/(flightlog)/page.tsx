@@ -3,8 +3,8 @@ import { FlightLogTemplate } from "../features/flightlog/ui/template/FlightLogTe
 
 export default function Home() {
   return (
-    <Box>
+    <>
       <FlightLogTemplate />
-    </Box>
+    </>
   );
 }
