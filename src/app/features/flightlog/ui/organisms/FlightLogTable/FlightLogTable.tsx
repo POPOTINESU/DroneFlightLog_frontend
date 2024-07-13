@@ -28,9 +28,9 @@ export const FlightLogTable = () => {
   const [flightLogs, setFlightLogs] = useState<FlightLogDetails[]>([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // 1ページに表示するアイテム数
+  const itemsPerPage = 7; // 1ページに表示するアイテム数
 
-  // flightLogsが空またはundefinedの場合はページ数を0にする
+  // flightLogsが空またはundefinedの場合はページ数を１にする
   const totalPages = flightLogs ? Math.ceil(flightLogs.length / itemsPerPage) : 1;
 
   useEffect(() => {
