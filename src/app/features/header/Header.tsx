@@ -134,7 +134,7 @@ export const Header = () => {
                     </MenuItem>
                   ))
                 ) : (
-                  <></>
+                  <>グループを作成しましょう</>
                 )}
               </MenuList>
             </Menu>

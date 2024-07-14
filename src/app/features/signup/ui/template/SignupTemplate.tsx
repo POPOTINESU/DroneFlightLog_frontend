@@ -46,7 +46,7 @@ export const SignupTemplate = () => {
                   const response = await signup(values);
                   if (response === 200) {
                     setSuccessMessage("新規登録成功しました。");
-                    router.push(`/?message=${successMessage}`);
+                    router.push(`/create/group/?message=${successMessage}`);
                   } else {
                     alert("新規登録失敗");
                   }
