@@ -17,9 +17,11 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
+  Badge,
+  IconButton,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useRouter } from "next/navigation";
 import { fetchGroupList } from "../../shared/api/fetchGroupList";
@@ -28,6 +30,8 @@ import { SelectedGroupState } from "./state/SelectedGroupState";
 import { GroupListState } from "./state/GroupListState";
 import { LogoutButton } from "./ui/LogoutButton/LogoutButton";
 import { fetchUser } from "./api/fetchUser/fetchUser";
+import { FaEnvelope } from "react-icons/fa";
+import { fetchNotification } from "./api/fetchNotification/fetchNotification";
 
 export const Header = () => {
   const router = useRouter();
@@ -35,6 +39,7 @@ export const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedGroup, setSelectedGroup] = useRecoilState(SelectedGroupState);
   const [groupList, setGroupList] = useRecoilState(GroupListState);
+  const [notifications, setNotifications] = useState(0);
   const [user, setUser] = useState("");
   const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -50,7 +55,7 @@ export const Header = () => {
       try {
         const response = await fetchGroupList();
         const user = await fetchUser();
-        setUser(user.user_name); // Ensure this is a string, adjust as needed
+        setUser(user.user_name);
         if (response.length > 0) {
           setSelectedGroup({ id: response[0].id, name: response[0].name });
         }
@@ -62,6 +67,22 @@ export const Header = () => {
     fetchGroup();
   }, []);
 
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetchNotification();
+        setNotifications(response.length);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchNotifications();
+  }, [notifications]);
+
+  const handelRedirect = () => {
+    router.push("/invite/");
+  }
+
   return (
     <Flex alignItems="center" height="100%" px={10}>
       <Text as="b">Drone Flight Log</Text>
@@ -71,17 +92,40 @@ export const Header = () => {
           <Text textAlign={"center"}>飛行記録</Text>
         </Link>
         <Link href="/groups">グループ一覧</Link>
+        <Box position="relative" display="inline-block" width={8}>
+          <IconButton
+            aria-label="notifications"
+            icon={<Box as={FaEnvelope} w={6} h={6} />}
+            color={"white"}
+            colorScheme="none"
+            background="none"
+            height={8}
+            width={8}
+            onClick={handelRedirect}
+          />
+          {notifications > 0 && (
+            <Badge
+              colorScheme="red"
+              borderRadius="full"
+              position="absolute"
+              top="0"
+              right="0"
+              transform="translate(30%, -10%)"
+            >
+              {notifications}
+            </Badge>
+          )}
+        </Box>
       </Grid>
-      <Button
+      <IconButton
         aria-label="HamburgerMenu"
         background="black"
         color="white"
         colorScheme="black"
         ref={btnRef}
         onClick={onOpen}
-      >
-        <GiHamburgerMenu size="1.5rem" />
-      </Button>
+        icon={<GiHamburgerMenu size="1.5rem" />}
+      />
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -109,6 +153,7 @@ export const Header = () => {
                   グループ名
                 </Text>
                 <MenuButton
+                  as={Button}
                   p={2}
                   color="white"
                   background="gray"
