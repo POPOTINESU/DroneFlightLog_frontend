@@ -1,15 +1,15 @@
 "use client";
 import {
+  Box,
   Button,
-  Card,
+  Flex,
   Grid,
   GridItem,
   HStack,
   Heading,
   Spacer,
   Text,
-  Box,
-  Flex,
+  Card,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -28,10 +28,9 @@ export const FlightLogTable = () => {
   const [flightLogs, setFlightLogs] = useState<FlightLogDetails[]>([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7; // 1ページに表示するアイテム数
+  const itemsPerPage = 7; 
 
-  // flightLogsが空またはundefinedの場合はページ数を１にする
-  const totalPages = flightLogs ? Math.ceil(flightLogs.length / itemsPerPage) : 1;
+  const totalPages = flightLogs.length > 0 ? Math.ceil(flightLogs.length / itemsPerPage) : 1;
 
   useEffect(() => {
     const message = searchParams.get("message");
@@ -51,7 +50,17 @@ export const FlightLogTable = () => {
     const fetchFlightLog = async () => {
       try {
         const response = await fetchFlightLogList();
-        setFlightLogs(response);
+
+        console.log(response);
+
+
+
+        if (Array.isArray(response)) {
+          setFlightLogs(response);
+        } else {
+          setFlightLogs([]);
+          console.error("Expected an array but received:", response);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -70,10 +79,10 @@ export const FlightLogTable = () => {
   const iconSize = "2rem";
 
   // 現在のページに表示する飛行記録を取得
-  const currentFlightLogs = flightLogs ? flightLogs.slice(
+  const currentFlightLogs = flightLogs.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
-  ) : [];
+  );
 
   return (
     <Box mx={8} height="100%" display="flex" flexDirection="column">
@@ -97,7 +106,7 @@ export const FlightLogTable = () => {
             </Button>
           </HStack>
           <Card mt={2} p={3} flex="1" overflowY="auto">
-            {currentFlightLogs && currentFlightLogs.length > 0 ? (
+            {currentFlightLogs.length > 0 ? (
               currentFlightLogs.map((data: FlightLogDetails) => (
                 <Box key={data.flight_log.id} mt={2}>
                   <Flex>
@@ -131,9 +140,6 @@ export const FlightLogTable = () => {
             )}
           </Card>
         </GridItem>
-        {/* <GridItem colSpan={10} height="100%" padding={3}>
-          <SearchField />
-        </GridItem> */}
       </Grid>
     </Box>
   );
