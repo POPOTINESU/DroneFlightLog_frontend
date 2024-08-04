@@ -9,7 +9,7 @@ export const InspectionDateInputField = (props: FormInputType) => {
   return (
     <>
       <FormLabel htmlFor="inspectionDate" marginBottom="0">
-        機体購入日
+        点検日
         <Field
           as={Input}
           id="inspectionDate"

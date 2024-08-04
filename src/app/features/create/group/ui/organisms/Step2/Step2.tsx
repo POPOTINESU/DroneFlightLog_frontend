@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Input } from "@chakra-ui/react";
 import { FieldArray, Form, Formik } from "formik";
 import React from "react";
 
@@ -83,6 +83,7 @@ export const Step2 = () => {
                           index={index}
                           handleChange={handleChange}
                         />
+
                       </Box>
                     ))}
                     <Flex justifyContent="flex-end" m={2} gap={2}>
