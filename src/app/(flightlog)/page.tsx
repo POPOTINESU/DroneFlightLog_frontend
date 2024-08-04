@@ -11,6 +11,7 @@ export default function Home() {
         <meta property="og:description" content="飛行記録一覧を表示する" />
         <meta property="og:url" content="https://www.drone-flight-log.com" />
         <meta property="og:type" content="website" />
+        
       </Head>
       <FlightLogTemplate />
     </>
