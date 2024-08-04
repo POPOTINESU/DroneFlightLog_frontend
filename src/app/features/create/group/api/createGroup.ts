@@ -19,6 +19,7 @@ type DroneSet = {
   droneNumber: string;
   JUNumber: string;
   purchaseDate: string;
+  inspectionDate: string;
 };
 
 type CreateGroupProps = {
