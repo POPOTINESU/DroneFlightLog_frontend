@@ -1,7 +1,4 @@
-import {
-  Box,
-  Flex,
-} from "@chakra-ui/react";
+import { Box, Flex, Input } from "@chakra-ui/react";
 import { FieldArray, Form, Formik } from "formik";
 import React from "react";
 
@@ -17,6 +14,7 @@ import { PurchaseDateField } from "../PurchaseDate/PurchaseDateField";
 import { AddButton } from "../../atoms/StepButton/AddButton";
 import { DeleteButton } from "../../atoms/StepButton/DeleteButton";
 import { ValidationSchema } from "./validation/Step2Validation";
+import { InspectionDateField } from "../InspectionDateField/InspectionDateField";
 
 export const Step2 = () => {
   const router = useRouter();
@@ -30,7 +28,14 @@ export const Step2 = () => {
     <Box>
       <Formik
         initialValues={{
-          sets: [{ droneNumber: "", JUNumber: "", purchaseDate: "" }],
+          sets: [
+            {
+              droneNumber: "",
+              JUNumber: "",
+              purchaseDate: "",
+              inspectionDate: "",
+            },
+          ],
         }}
         validationSchema={ValidationSchema}
         validateOnBlur={true}
@@ -74,6 +79,11 @@ export const Step2 = () => {
                           index={index}
                           handleChange={handleChange}
                         />
+                        <InspectionDateField
+                          index={index}
+                          handleChange={handleChange}
+                        />
+
                       </Box>
                     ))}
                     <Flex justifyContent="flex-end" m={2} gap={2}>

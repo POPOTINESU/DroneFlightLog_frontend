@@ -25,8 +25,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 export const CreateGroupTemplate = () => {
   // stepが1の時はStep1を表示、2の時はStep2を表示する
   const [step, setStep] = useRecoilState(FormStepState);
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [successMessage, setSuccessMessage] = useState("");
 
-  // create/groupがアンマウントされるとsessionStorageのデータを削除する
+  // クライアントサイドのレンダリングを確認する
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // コンポーネントがアンマウントされる際にsessionStorageのデータを削除する
   useEffect(() => {
     return () => {
       setStep(1);
@@ -36,11 +45,9 @@ export const CreateGroupTemplate = () => {
       sessionStorage.removeItem("JUNumber");
       sessionStorage.removeItem("purchaseDate");
     };
-  }, []);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [successMessage, setSuccessMessage] = useState("");
+  }, [setStep]);
 
+  // メッセージをクエリパラメータから取得する
   useEffect(() => {
     const message = searchParams.get("message");
     if (message) {
@@ -54,6 +61,10 @@ export const CreateGroupTemplate = () => {
       return () => clearTimeout(timer);
     }
   }, [searchParams, router]);
+
+  if (!isClient) {
+    return null;
+  }
 
 
   return (
